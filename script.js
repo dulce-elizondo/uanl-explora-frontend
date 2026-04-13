@@ -584,7 +584,7 @@ function submitSugerencia(e) {
   fd.append('descripcion', descripcion);
   if (fotoFile) fd.append('foto', fotoFile);
 
-  fetch('http://localhost:3000/lugares', { method: 'POST', body: fd })
+  fetch('https://uanl-explora-backend.onrender.com/lugares', { method: 'POST', body: fd })
     .then(function(r) { return r.json(); })
     .then(function(data) {
       var nuevo = {
@@ -593,7 +593,7 @@ function submitSugerencia(e) {
         nombre: nombre,
         categoria: categoria,
         descripcion: descripcion,
-        imagen: data.foto ? ('http://localhost:3000/uploads/' + data.foto) : null,
+        imagen: data.foto ? ('https://uanl-explora-backend.onrender.com/uploads/' + data.foto) : null,
         resenas: [{
           id: 'r' + Date.now(),
           autorId: usuario.id,
@@ -793,7 +793,7 @@ function submitResena(lugarId) {
   var usuarioIdNum = usuario.id.toString().replace('db_', '');
   var lugarIdNum   = lugarId.toString().replace('db_', '').replace('l', '');
 
-  fetch('http://localhost:3000/resenas', {
+  fetch('https://uanl-explora-backend.onrender.com/resenas', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
