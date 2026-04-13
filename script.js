@@ -650,7 +650,7 @@ function submitSugerencia(e) {
         nombre: nombre,
         categoria: categoria,
         descripcion: descripcion,
-        imagen: data.foto ? ('https://uanl-explora-backend.onrender.com/uploads/' + data.foto) : null,
+        imagen: data.foto ? (data.foto.startsWith('http') ? data.foto : 'https://uanl-explora-backend.onrender.com/uploads/' + data.foto) : null,
         resenas: [{
           id: 'r' + Date.now(),
           autorId: usuario.id,

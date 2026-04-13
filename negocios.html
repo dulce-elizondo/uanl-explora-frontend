@@ -127,7 +127,7 @@ function cargarNegociosDB() {
 }
 
 function renderNegocioCard(n) {
-  var imgSrc = n.foto ? (API + '/uploads/' + n.foto) : null;
+  var imgSrc = n.foto ? (n.foto.startsWith('http') ? n.foto : API + '/uploads/' + n.foto) : null;
   var usuario = getUsuarioActual();
   var usuarioIdNum = usuario ? usuario.id.toString().replace('db_', '') : null;
   var esMio = usuarioIdNum && n.usuario_id != null && parseInt(n.usuario_id) === parseInt(usuarioIdNum);

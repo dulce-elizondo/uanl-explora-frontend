@@ -147,7 +147,7 @@ function renderTodo(misResenas, misPublicaciones, misNegocios) {
 
     // Negocios publicados desde MySQL
     html += misNegocios.map(function(n) {
-      var imgSrc = n.foto ? (API + '/uploads/' + n.foto) : null;
+      var imgSrc = n.foto ? (n.foto.startsWith('http') ? n.foto : API + '/uploads/' + n.foto) : null;
       return (
         '<div class="negocio-card" id="neg-panel-' + n.id + '">' +
           '<div class="negocio-card-img">' +
