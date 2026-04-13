@@ -71,7 +71,7 @@ const SEED_DATA = [
   {
     id: 'l1', nombre: 'Biblioteca Capilla Alfonsina', categoria: 'populares',
     descripcion: 'La biblioteca más importante de la UANL. Cuenta con amplias salas de lectura, acceso a internet, cubículos privados y más de 200,000 volúmenes.',
-    imagen: '../images/lugares/capilla alfonsina.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/capilla-alfonsina.jpg',
     resenas: [
       { id: 'r1', autorId: 'seed', autor: 'Carlos R.', texto: 'El mejor lugar para estudiar. Silencioso y con buena iluminación.', estrellas: 5, fecha: '2024-11-15' },
       { id: 'r2', autorId: 'seed', autor: 'Diana P.', texto: 'Muy completa. A veces los cubículos están llenos en exámenes.', estrellas: 4, fecha: '2024-12-01' },
@@ -81,7 +81,7 @@ const SEED_DATA = [
   {
     id: 'l13', nombre: 'Cafetería FACPYA', categoria: 'cafeterias',
     descripcion: 'Cafetería de la Facultad de Contaduría Pública y Administración. Ofrece desayunos, almuerzos y bebidas para los estudiantes.',
-    imagen: '../images/lugares/cafeterias/cafeteria-facpya.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/cafeteria-facpya.jpg',
     resenas: [
       { id: 'r24', autorId: 'seed', autor: 'Valeria R.', texto: 'Excelente comida, siempre fresca y a buen precio. ¡Mi cafetería favorita!', estrellas: 5, fecha: '2025-02-10' },
     ]
@@ -89,7 +89,7 @@ const SEED_DATA = [
   {
     id: 'l14', nombre: 'Cafetería FIC', categoria: 'cafeterias',
     descripcion: 'Cafetería de la Facultad de Ingeniería Civil. Menú variado con opciones económicas y ricas.',
-    imagen: '../images/lugares/cafeterias/cafeteria-fic.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/cafeteria-fic.jpg',
     resenas: [
       { id: 'r25', autorId: 'seed', autor: 'Santiago M.', texto: 'Super buena la comida, el arroz y el pollo están increíbles. Totalmente recomendada.', estrellas: 5, fecha: '2025-01-22' },
     ]
@@ -97,7 +97,7 @@ const SEED_DATA = [
   {
     id: 'l15', nombre: 'Cafetería FIME', categoria: 'cafeterias',
     descripcion: 'Cafetería de la Facultad de Ingeniería Mecánica y Eléctrica. Variedad de platillos y snacks para los ingenieros.',
-    imagen: '../images/lugares/cafeterias/cafeteria-fime.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/cafeteria-fime.jpg',
     resenas: [
       { id: 'r26', autorId: 'seed', autor: 'Daniela K.', texto: 'La mejor cafetería de FIME, todo está riquísimo y el servicio es muy rápido.', estrellas: 5, fecha: '2025-03-05' },
     ]
@@ -105,7 +105,7 @@ const SEED_DATA = [
   {
     id: 'l8', nombre: 'Librería UANL', categoria: 'negocios',
     descripcion: 'Librería oficial con textos académicos, revistas científicas, material de estudio y artículos universitarios.',
-    imagen: '../images/lugares/libreria.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/libreria.jpg',
     resenas: [
       { id: 'r16', autorId: 'seed', autor: 'Pedro A.', texto: 'Excelente selección de libros académicos. Personal muy amable.', estrellas: 5, fecha: '2024-12-05' },
     ]
@@ -113,7 +113,7 @@ const SEED_DATA = [
   {
     id: 'l9', nombre: 'Impresiones en la Biblio de FIME', categoria: 'negocios',
     descripcion: 'Servicio rápido de copias e impresiones ubicado en la Facultad de Ingeniería Mecánica y Eléctrica.',
-    imagen: '../images/lugares/reprografia.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/reprografia.jpg',
     resenas: [
       { id: 'r17', autorId: 'seed', autor: 'Natalia M.', texto: 'Muy rápido y económico. Útil en época de exámenes.', estrellas: 4, fecha: '2024-11-10' },
       { id: 'r18', autorId: 'seed', autor: 'Tomás B.', texto: 'Buen servicio, nunca me han fallado.', estrellas: 5, fecha: '2024-12-14' },
@@ -122,7 +122,7 @@ const SEED_DATA = [
   {
     id: 'l10', nombre: 'Baños Capilla Alfonsina', categoria: 'banos',
     descripcion: 'Sanitarios de la Biblioteca Capilla Alfonsina. Muy bien mantenidos y limpios durante todo el día.',
-    imagen: '../images/lugares/baños/baños capilla alfonsina.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/banos-capilla-alfonsina.jpg',
     resenas: [
       { id: 'r19', autorId: 'seed', autor: 'Andrea C.', texto: 'Siempre limpios. Los mejores baños del campus.', estrellas: 5, fecha: '2024-10-30' },
       { id: 'r20', autorId: 'seed', autor: 'Pablo E.', texto: 'Excelente higiene. Siempre hay papel y jabón.', estrellas: 5, fecha: '2024-12-02' },
@@ -139,7 +139,7 @@ const SEED_DATA = [
   {
     id: 'l12', nombre: 'Baños FIME Edificio 1', categoria: 'banos',
     descripcion: 'Sanitarios de la Facultad de Ingeniería renovados recientemente. Amplios y bien equipados.',
-    imagen: '../images/lugares/baños/baños fime planta baja.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/banos-fime.jpg',
     resenas: [
       { id: 'r22', autorId: 'seed', autor: 'Elena B.', texto: 'Bien mantenidos desde la remodelación. Hay jabón y papel.', estrellas: 4, fecha: '2024-11-18' },
       { id: 'r23', autorId: 'seed', autor: 'Omar J.', texto: 'Mucho mejor que antes. Los remodelaron bien.', estrellas: 4, fecha: '2024-12-20' },
@@ -148,7 +148,7 @@ const SEED_DATA = [
   {
     id: 'l16', nombre: 'Tacos', categoria: 'comida',
     descripcion: 'Deliciosos tacos en el campus universitario. Variedad de guisados, tacos al pastor y más opciones para comer rápido y a buen precio.',
-    imagen: '../images/lugares/comida/tacos.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/tacos.jpg',
     resenas: [
       { id: 'r27', autorId: 'seed', autor: 'Javier P.', texto: 'Los mejores tacos del campus. Muy ricos y económicos.', estrellas: 5, fecha: '2025-02-15' },
     ]
@@ -156,7 +156,7 @@ const SEED_DATA = [
   {
     id: 'l17', nombre: 'Tim Hortons', categoria: 'comida',
     descripcion: 'Sucursal de Tim Hortons ubicada en FIME. Café, bebidas frías, donas y snacks para los estudiantes de ingeniería.',
-    imagen: '../images/lugares/comida/Tim hortons-FIME.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/tim-hortons-fime.jpg',
     resenas: [
       { id: 'r28', autorId: 'seed', autor: 'Lucía F.', texto: 'El café frío es excelente, perfecto para estudiar largas horas.', estrellas: 5, fecha: '2025-01-30' },
     ]
@@ -164,7 +164,7 @@ const SEED_DATA = [
   {
     id: 'l18', nombre: 'Puesto de Comida', categoria: 'comida',
     descripcion: 'Puesto de comida ubicado detrás de Rectoría. Variedad de platillos caseros a precios muy accesibles para estudiantes.',
-    imagen: '../images/lugares/comida/puesto de comida- detras de rectoria.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/puesto-comida-rectoria.jpg',
     resenas: [
       { id: 'r29', autorId: 'seed', autor: 'Andrés G.', texto: 'Comida de calidad y muy económica. Ideal para un almuerzo rápido.', estrellas: 5, fecha: '2025-02-20' },
     ]
@@ -172,7 +172,7 @@ const SEED_DATA = [
   {
     id: 'l19', nombre: 'Tim Hortons FARQ', categoria: 'comida',
     descripcion: 'Sucursal de Tim Hortons en la Facultad de Arquitectura. Café, timbits y bebidas para los estudiantes creativos.',
-    imagen: '../images/lugares/comida/tim hortons- FARQ.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/tim-hortons-farq.jpg',
     resenas: [
       { id: 'r30', autorId: 'seed', autor: 'Sofía B.', texto: 'Ambiente muy agradable y el café está delicioso. Gran opción para descansar.', estrellas: 5, fecha: '2025-03-10' },
     ]
@@ -180,7 +180,7 @@ const SEED_DATA = [
   {
     id: 'l20', nombre: 'Hub Natura – Biblio de FIME', categoria: 'internet',
     descripcion: 'Espacio de estudio con conexión a internet en la Biblioteca de FIME. Cómodo, tranquilo y con buena señal WiFi.',
-    imagen: '../images/lugares/internet/lugar con internet-Hub natura-Biblio de FIME.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/hub-natura-biblio-fime.jpg',
     resenas: [
       { id: 'r31', autorId: 'seed', autor: 'Carlos T.', texto: 'Excelente lugar para estudiar, WiFi muy rápido y mesas cómodas.', estrellas: 5, fecha: '2025-02-08' },
     ]
@@ -188,7 +188,7 @@ const SEED_DATA = [
   {
     id: 'l21', nombre: 'Hub Natura – Edificio 7', categoria: 'internet',
     descripcion: 'Área de descanso y estudio con internet en el Edificio 7. Ideal para trabajar en proyectos o revisar material de clase.',
-    imagen: '../images/lugares/internet/lugar con internet-Hub natura-Edificio 7.jpg',
+    imagen: 'https://uanl-explora-backend.onrender.com/uploads/hub-natura-edificio7.jpg',
     resenas: [
       { id: 'r32', autorId: 'seed', autor: 'Mariana H.', texto: 'Muy buen espacio con internet estable. Lo recomiendo para estudiar en equipo.', estrellas: 5, fecha: '2025-03-01' },
     ]
