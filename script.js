@@ -248,22 +248,18 @@ function setSession(userId) {
 
 function clearSession() {
   localStorage.removeItem('uanl_sesion');
-}
-
-function getUsuarios() {
-  return JSON.parse(localStorage.getItem('uanl_usuarios') || '[]');
+  localStorage.removeItem('uanl_usuario_actual');
 }
 
 function getUsuarioActual() {
-  const id = getSession();
-  if (!id) return null;
-  return getUsuarios().find(function(u) { return u.id === id; }) || null;
+  var stored = localStorage.getItem('uanl_usuario_actual');
+  if (!stored) return null;
+  try { return JSON.parse(stored); } catch(e) { return null; }
 }
 
-function saveUsuario(usuario) {
-  var usuarios = getUsuarios();
-  usuarios.push(usuario);
-  localStorage.setItem('uanl_usuarios', JSON.stringify(usuarios));
+function saveUsuarioActual(user) {
+  localStorage.setItem('uanl_usuario_actual', JSON.stringify(user));
+  setSession(user.id);
 }
 
 function logout() {

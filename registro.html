@@ -124,8 +124,7 @@ function handleLogin(e) {
     // Guardar en localStorage para uso offline/session
     var user = { id: 'db_' + r.data.id, nombre: r.data.nombre, apellido: r.data.apellido,
                  usuario: r.data.usuario, foto: r.data.foto || null };
-    guardarUsuarioLocal(user);
-    setSession(user.id);
+    saveUsuarioActual(user);
     window.location.href = 'populares.html';
   })
   .catch(function() { showError('No se pudo conectar al servidor. Verifica que esté corriendo.'); });
@@ -158,22 +157,10 @@ function handleRegister(e) {
     if (!r.ok) { showError(r.data.error || 'Error al crear la cuenta.'); return; }
     var user = { id: 'db_' + r.data.id, nombre: r.data.nombre, apellido: r.data.apellido,
                  usuario: r.data.usuario, foto: r.data.foto || null };
-    guardarUsuarioLocal(user);
-    setSession(user.id);
+    saveUsuarioActual(user);
     window.location.href = 'populares.html';
   })
   .catch(function() { showError('No se pudo conectar al servidor. Verifica que esté corriendo.'); });
-}
-
-// Guarda el usuario en localStorage (para sesión y uso offline)
-function guardarUsuarioLocal(user) {
-  var usuarios = getUsuarios();
-  var existe = false;
-  for (var i = 0; i < usuarios.length; i++) {
-    if (usuarios[i].id === user.id) { usuarios[i] = user; existe = true; break; }
-  }
-  if (!existe) usuarios.push(user);
-  localStorage.setItem('uanl_usuarios', JSON.stringify(usuarios));
 }
 </script>
 </body>
