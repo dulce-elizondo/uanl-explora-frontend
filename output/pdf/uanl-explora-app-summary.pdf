@@ -1,0 +1,343 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Contents 4 0 R /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> >>
+endobj
+4 0 obj
+<< /Length 4666 >>
+stream
+BT
+/F2 19 Tf
+1 0 0 1 42 798 Tm
+(UANL Explora - App Summary) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 393 800 Tm
+(Repo-based one-page brief) Tj
+ET
+1.1 w
+42 790 m
+553 790 l
+S
+BT
+/F2 11 Tf
+1 0 0 1 42 756 Tm
+(What It Is) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 740 Tm
+(UANL Explora is a campus discovery web app for) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 728 Tm
+(browsing places at UANL, reading peer reviews,) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 716 Tm
+(saving favorites, and publishing new places or) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 704 Tm
+(businesses.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 692 Tm
+(This repo contains a static HTML/CSS/JavaScript) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 680 Tm
+(frontend with localStorage persistence plus) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 668 Tm
+(optional calls to a localhost backend.) Tj
+ET
+BT
+/F2 11 Tf
+1 0 0 1 42 648 Tm
+(Who It's For) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 632 Tm
+(Primary persona: UANL students and campus visitors) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 620 Tm
+(who want quick campus recommendations for) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 608 Tm
+(cafeterias, businesses, bathrooms, and popular) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 596 Tm
+(spots.) Tj
+ET
+BT
+/F2 11 Tf
+1 0 0 1 42 576 Tm
+(What It Does) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 560 Tm
+(- Shows landing, category, favorites, reviews, and) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 549 Tm
+(  business pages.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 537 Tm
+(- Seeds example places and reviews on first load.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 525 Tm
+(- Lets signed-in users add favorites and write) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 514 Tm
+(  ratings/reviews.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 502 Tm
+(- Lets users suggest new places from a shared modal) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 491 Tm
+(  form.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 479 Tm
+(- Lets users publish businesses with) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 468 Tm
+(  schedule/location details.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 456 Tm
+(- Computes top-ranked places from rating average) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 445 Tm
+(  plus review count.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 433 Tm
+(- Keeps user/session/favorites/place data in) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 42 422 Tm
+(  browser localStorage.) Tj
+ET
+BT
+/F2 11 Tf
+1 0 0 1 310 756 Tm
+(How It Works) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 740 Tm
+(- UI layer: multiple HTML pages share one) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 729 Tm
+(  stylesheet and one shared script.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 717 Tm
+(- Shared client logic in script.js seeds data,) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 706 Tm
+(  renders header/nav/cards, manages auth/session,) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 695 Tm
+(  favorites, reviews, and suggestion flows.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 683 Tm
+(- Client data flow: pages call shared helpers ->) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 672 Tm
+(  read/write localStorage keys uanl_lugares,) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 661 Tm
+(  uanl_usuarios, uanl_favoritos, uanl_sesion ->) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 650 Tm
+(  re-render or reload.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 638 Tm
+(- Ranking flow: getTop10\(\) scores places from) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 627 Tm
+(  average stars and review count, then landing and) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 616 Tm
+(  populares pages display the highest-ranked) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 605 Tm
+(  entries.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 593 Tm
+(- Backend touchpoints from repo evidence only:) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 582 Tm
+(  fetch\(\) calls target http://localhost:3000 for) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 571 Tm
+(  login, registro, lugares, resenas, and negocios.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 559 Tm
+(- Backend implementation, API server code, database) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 548 Tm
+(  schema, and deployment config: Not found in repo.) Tj
+ET
+BT
+/F2 11 Tf
+1 0 0 1 310 528 Tm
+(How To Run) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 512 Tm
+(- Open index.html in a browser for the) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 501 Tm
+(  frontend-only experience.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 489 Tm
+(- Use registro.html to create/login to a local) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 478 Tm
+(  session.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 466 Tm
+(- For API-backed login/business/place upload flows,) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 455 Tm
+(  run the localhost:3000 backend. Backend start) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 444 Tm
+(  commands: Not found in repo.) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 432 Tm
+(- Optional local asset note: styles.css references) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 421 Tm
+(  img/uanl-bg.jpg, but that image file was not) Tj
+ET
+BT
+/F1 9 Tf
+1 0 0 1 310 410 Tm
+(  found in this repo snapshot.) Tj
+ET
+0.6 w
+42 68 m
+553 68 l
+S
+BT
+/F1 8 Tf
+1 0 0 1 42 56 Tm
+(Evidence used: index.html, registro.html, negocios.html, mis-resenas.html, banos.html, cafeterias.html, script.js, styles.css.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000004969 00000 n 
+0000005039 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+5114
+%%EOF

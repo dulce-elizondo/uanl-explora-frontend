@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis Reseñas y Publicaciones – UANL Explora</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header id="app-header"></header>
+
+<h2 class="page-title">📝 Mis Reseñas y Publicaciones</h2>
+<p class="page-subtitle" id="subtitulo">Cargando...</p>
+
+<div id="cards-container" style="display:flex;flex-direction:column;align-items:center;padding:10px 16px 110px;gap:14px"></div>
+
+<nav id="bottom-nav"></nav>
+
+<script src="script.js"></script>
+<script>
+var API = 'http://localhost:3000';
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderHeader();
+  renderBottomNav('mis-resenas');
+  renderModalSugerir();
+
+  var usuario = getUsuarioActual();
+  if (!usuario) {
+    document.getElementById('subtitulo').textContent = '';
+    document.getElementById('cards-container').innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-icon">🔒</div>' +
+        '<h3>Acceso requerido</h3>' +
+        '<p>Debes <a href="registro.html">iniciar sesión</a> para ver tus publicaciones.</p>' +
+      '</div>';
+    return;
+  }
+
+  var todos = getLugares();
+  var misResenas     = [];
+  var misPublicaciones = []; // lugares sugeridos por el usuario
+
+  todos.forEach(function(lugar) {
+    // Lugar sugerido por este usuario
+    if (lugar.autorId && lugar.autorId === usuario.id) {
+      misPublicaciones.push(lugar);
+    }
+    // Reseñas escritas por este usuario
+    lugar.resenas.forEach(function(r) {
+      if (r.autorId === usuario.id) misResenas.push({ lugar: lugar, resena: r });
+    });
+  });
+
+  // Negocios publicados por el usuario desde el backend
+  var usuarioIdNum = usuario.id.toString().replace('db_', '');
+  fetch(API + '/negocios')
+    .then(function(r) { return r.json(); })
+    .then(function(todosNegocios) {
+      var misNegocios = todosNegocios.filter(function(n) {
+        return parseInt(n.usuario_id) === parseInt(usuarioIdNum);
+      });
+      renderTodo(misResenas, misPublicaciones, misNegocios);
+    })
+    .catch(function() {
+      renderTodo(misResenas, misPublicaciones, []);
+    });
+});
+
+function renderTodo(misResenas, misPublicaciones, misNegocios) {
+  var totalPublicaciones = misPublicaciones.length + misNegocios.length;
+  var total = misResenas.length + totalPublicaciones;
+
+  document.getElementById('subtitulo').textContent =
+    total + ' elemento' + (total !== 1 ? 's' : '') + ' en total';
+
+  var container = document.getElementById('cards-container');
+
+  if (!total) {
+    container.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-icon">📝</div>' +
+        '<h3>Aún no cuentas con publicaciones</h3>' +
+        '<p>Agrega una reseña en cualquier lugar, sugiere un lugar nuevo o publica tu negocio desde <a href="negocios.html">Negocios</a>.</p>' +
+      '</div>';
+    return;
+  }
+
+  var html = '';
+
+  // --- RESEÑAS ---
+  if (misResenas.length) {
+    html += '<p class="seccion-label" style="width:100%;max-width:100%">Reseñas (' + misResenas.length + ')</p>';
+    html += misResenas.map(function(item) {
+      var l = item.lugar;
+      var r = item.resena;
+      return (
+        '<div class="card" style="width:100%;max-width:100%">' +
+          '<div class="card-body">' +
+            '<div class="card-header-row">' +
+              '<div class="card-title-wrap">' +
+                '<div class="card-icon">' + getCategoryIcon(l.categoria) + '</div>' +
+                '<strong class="card-title">' + l.nombre + '</strong>' +
+              '</div>' +
+              '<span class="badge badge-' + l.categoria + '">' + getCategoryLabel(l.categoria) + '</span>' +
+            '</div>' +
+            '<div class="mi-resena-box">' +
+              '<div class="estrellas">' + '★'.repeat(r.estrellas) + '☆'.repeat(5 - r.estrellas) + '</div>' +
+              '<p class="card-desc">&ldquo;' + r.texto + '&rdquo;</p>' +
+              '<small style="color:var(--texto-suave)">' + r.fecha + '</small>' +
+            '</div>' +
+            '<div style="margin-top:10px">' +
+              '<button onclick="borrarResenaDesdePanel(\'' + l.id + '\',\'' + r.id + '\')" style="font-size:.78rem;color:#c0392b;border:1px solid #c0392b;padding:4px 12px;border-radius:8px;background:none;cursor:pointer">🗑 Eliminar reseña</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  // --- PUBLICACIONES (lugares sugeridos + negocios) ---
+  if (totalPublicaciones) {
+    html += '<p class="seccion-label" style="width:100%;max-width:100%">Publicaciones (' + totalPublicaciones + ')</p>';
+
+    // Lugares sugeridos via "Sugerir lugar"
+    html += misPublicaciones.map(function(l) {
+      return (
+        '<div class="card" style="width:100%;max-width:100%">' +
+          '<div class="card-body">' +
+            '<div class="card-header-row">' +
+              '<div class="card-title-wrap">' +
+                '<div class="card-icon">' + getCategoryIcon(l.categoria) + '</div>' +
+                '<strong class="card-title">' + l.nombre + '</strong>' +
+              '</div>' +
+              '<span class="badge badge-' + l.categoria + '">' + getCategoryLabel(l.categoria) + '</span>' +
+            '</div>' +
+            '<p class="card-desc">' + l.descripcion + '</p>' +
+            '<small style="color:var(--texto-suave)">Lugar sugerido por ti</small>' +
+            '<div style="margin-top:10px">' +
+              '<button onclick="borrarLugar(\'' + l.id + '\')" style="font-size:.78rem;color:#c0392b;border:1px solid #c0392b;padding:4px 12px;border-radius:8px;background:none;cursor:pointer">🗑 Eliminar publicación</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    // Negocios publicados desde MySQL
+    html += misNegocios.map(function(n) {
+      var imgSrc = n.foto ? (API + '/uploads/' + n.foto) : null;
+      return (
+        '<div class="negocio-card" id="neg-panel-' + n.id + '">' +
+          '<div class="negocio-card-img">' +
+            (imgSrc ? '<img src="' + imgSrc + '" alt="' + n.nombre + '">' : '🏢') +
+          '</div>' +
+          '<div class="negocio-card-body">' +
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">' +
+              '<h3>' + n.nombre + '</h3>' +
+              (n.categoria ? '<span class="badge badge-negocios">' + n.categoria + '</span>' : '') +
+            '</div>' +
+            '<div class="negocio-card-meta">' +
+              (n.dias      ? '<span>📅 ' + n.dias      + '</span>' : '') +
+              (n.horario   ? '<span>🕐 ' + n.horario   + '</span>' : '') +
+              (n.ubicacion ? '<span>📍 ' + n.ubicacion + '</span>' : '') +
+            '</div>' +
+            (n.descripcion ? '<p class="negocio-card-desc">' + n.descripcion + '</p>' : '') +
+            '<div style="margin-top:10px">' +
+              '<button onclick="borrarNegocio(' + n.id + ')" style="font-size:.78rem;color:#c0392b;border:1px solid #c0392b;padding:4px 12px;border-radius:8px;background:none;cursor:pointer">🗑 Eliminar negocio</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  container.innerHTML = html;
+}
+
+function borrarResenaDesdePanel(lugarId, resenaId) {
+  showConfirm('¿Eliminar esta reseña?', function() {
+    var lugares = JSON.parse(localStorage.getItem('uanl_lugares') || '[]');
+    var lugar = lugares.find(function(l) { return l.id === lugarId; });
+    if (!lugar) return;
+    lugar.resenas = lugar.resenas.filter(function(r) { return r.id !== resenaId; });
+    localStorage.setItem('uanl_lugares', JSON.stringify(lugares));
+    showToast('Reseña eliminada.', 'success');
+    setTimeout(function() { location.reload(); }, 1600);
+  });
+}
+
+function borrarLugar(lugarId) {
+  showConfirm('¿Eliminar esta publicación?', function() {
+    var lugares = JSON.parse(localStorage.getItem('uanl_lugares') || '[]');
+    localStorage.setItem('uanl_lugares', JSON.stringify(lugares.filter(function(l) { return l.id !== lugarId; })));
+    showToast('Publicación eliminada.', 'success');
+    setTimeout(function() { location.reload(); }, 1600);
+  });
+}
+
+function borrarNegocio(id) {
+  showConfirm('¿Eliminar este negocio?', function() {
+    fetch(API + '/negocios/' + id, { method: 'DELETE' })
+      .then(function() { showToast('Negocio eliminado.', 'success'); setTimeout(function() { location.reload(); }, 1600); })
+      .catch(function() { showToast('No se pudo conectar al servidor.', 'error'); });
+  });
+}
+</script>
+</body>
+</html>

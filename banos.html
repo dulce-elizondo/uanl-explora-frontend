@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Baños – UANL Explora</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header id="app-header"></header>
+
+<div class="app-search">
+  <input type="text" id="buscador" placeholder="🔍 Buscar baños..." oninput="filtrar(this.value)">
+</div>
+
+<h2 class="page-title">🚻 Baños</h2>
+<p class="page-subtitle">Sanitarios disponibles en el campus universitario</p>
+
+<div class="cards-container" id="cards-container"></div>
+
+<nav id="bottom-nav"></nav>
+
+<script src="script.js"></script>
+<script>
+var lugares = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderHeader();
+  renderBottomNav('');
+  renderModalSugerir();
+  lugares = getLugaresByCategoria('banos');
+  renderCards(lugares);
+});
+
+function renderCards(lista) {
+  var container = document.getElementById('cards-container');
+  if (!lista.length) {
+    container.innerHTML =
+      '<div class="empty-state">' +
+        '<div class="empty-icon">🚻</div>' +
+        '<h3>Sin baños registrados aún</h3>' +
+        '<p>Sé el primero en sugerir un baño del campus.</p>' +
+      '</div>';
+    return;
+  }
+  container.innerHTML = lista.map(function(l) { return renderCard(l); }).join('');
+}
+
+function filtrar(query) {
+  var q = query.toLowerCase();
+  renderCards(lugares.filter(function(l) {
+    return l.nombre.toLowerCase().includes(q) || l.descripcion.toLowerCase().includes(q);
+  }));
+}
+</script>
+</body>
+</html>

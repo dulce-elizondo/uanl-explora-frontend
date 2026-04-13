@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Negocios – UANL Explora</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header id="app-header"></header>
+
+<div class="app-search">
+  <input type="text" id="buscador" placeholder="🔍 Buscar negocio..." oninput="filtrar(this.value)">
+</div>
+
+<h2 class="page-title">🏢 Negocios</h2>
+<p class="page-subtitle">Papelerías, librerías y servicios disponibles en el campus</p>
+
+<div class="negocios-wrapper">
+
+  <div style="width:100%;max-width:100%">
+    <button class="btn-publicar-negocio" style="width:100%;justify-content:center" onclick="abrirModalNegocio()">
+      + Publicar negocio
+    </button>
+  </div>
+
+  <!-- Negocios publicados por usuarios (desde MySQL) -->
+  <div id="negocios-db" style="width:100%;display:contents"></div>
+
+  <!-- Separador solo si hay negocios del seed -->
+  <div id="separador" style="display:none;width:100%;max-width:560px">
+    <p style="font-size:.78rem;color:var(--texto-suave);font-weight:700;text-transform:uppercase;letter-spacing:.6px;border-bottom:1px solid var(--gris-medio);padding-bottom:6px">Del campus</p>
+  </div>
+
+  <!-- Negocios del seed (localStorage) -->
+  <div id="negocios-seed" style="width:100%;display:contents"></div>
+
+</div>
+
+<nav id="bottom-nav"></nav>
+
+<!-- Modal publicar negocio -->
+<div id="modal-negocio" class="modal-overlay">
+  <div class="modal-content">
+    <button class="modal-close" onclick="cerrarModalNegocio()">✕</button>
+    <h3>Publicar Negocio</h3>
+    <form onsubmit="submitNegocio(event)">
+
+      <input type="text" id="neg-nombre" placeholder="Nombre del negocio *" required>
+
+      <select id="neg-categoria">
+        <option value="">Categoría...</option>
+        <option value="Comida">Comida</option>
+        <option value="Papelería">Papelería</option>
+        <option value="Librería">Librería</option>
+        <option value="Copias e impresiones">Copias e impresiones</option>
+        <option value="Tecnología">Tecnología</option>
+        <option value="Ropa y accesorios">Ropa y accesorios</option>
+        <option value="Salud">Salud</option>
+        <option value="Otro">Otro</option>
+      </select>
+
+      <textarea id="neg-descripcion" placeholder="Descripción breve *" required></textarea>
+
+      <input type="text" id="neg-dias" placeholder="Días disponibles * (ej. Lunes a Viernes)" required>
+
+      <input type="text" id="neg-horario" placeholder="Horario (ej. 8:00 am – 6:00 pm)">
+
+      <input type="text" id="neg-ubicacion" placeholder="Ubicación (ej. Frente a Biblioteca)">
+
+      <div style="display:flex;align-items:center;gap:10px;margin:2px 0">
+        <div class="foto-preview" id="neg-foto-preview" style="width:44px;height:44px;font-size:1.4rem;flex-shrink:0">🏢</div>
+        <div>
+          <div style="font-size:.76rem;color:var(--texto-suave);margin-bottom:3px">Foto *</div>
+          <input type="file" id="neg-foto" accept="image/*" onchange="previewNegFoto(this)" style="font-size:.8rem" required>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" style="padding:10px;font-size:.9rem;margin-top:2px">Publicar</button>
+    </form>
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+var API = 'http://localhost:3000';
+var lugaresNeg = [];
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderHeader();
+  renderBottomNav('negocios');
+  renderModalSugerir();
+
+  // Seed data (localStorage)
+  lugaresNeg = getLugaresByCategoria('negocios');
+  var seedContainer = document.getElementById('negocios-seed');
+  if (lugaresNeg.length) {
+    document.getElementById('separador').style.display = 'flex';
+    seedContainer.innerHTML = lugaresNeg.map(function(l) {
+      return renderNegocioCardSeed(l);
+    }).join('');
+  }
+
+  // Negocios publicados (MySQL)
+  cargarNegociosDB();
+});
+
+function cargarNegociosDB() {
+  fetch(API + '/negocios')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var container = document.getElementById('negocios-db');
+      if (!data.length) {
+        container.innerHTML =
+          '<div style="padding:16px 16px 0;color:var(--texto-suave);font-size:.88rem">' +
+            'Aún no hay negocios publicados por usuarios. ¡Sé el primero!' +
+          '</div>';
+        return;
+      }
+      container.innerHTML = data.map(renderNegocioCard).join('');
+    })
+    .catch(function() {
+      document.getElementById('negocios-db').innerHTML =
+        '<div style="padding:16px;color:var(--texto-suave);font-size:.85rem">⚠ No se pudo conectar al servidor.</div>';
+    });
+}
+
+function renderNegocioCard(n) {
+  var imgSrc = n.foto ? (API + '/uploads/' + n.foto) : null;
+  var usuario = getUsuarioActual();
+  var usuarioIdNum = usuario ? usuario.id.toString().replace('db_', '') : null;
+  var esMio = usuarioIdNum && n.usuario_id != null && parseInt(n.usuario_id) === parseInt(usuarioIdNum);
+  return (
+    '<div class="negocio-card" id="neg-card-' + n.id + '">' +
+      '<div class="negocio-card-img" id="neg-img-' + n.id + '">' +
+        (imgSrc ? '<img src="' + imgSrc + '" alt="' + n.nombre + '">' : '🏢') +
+      '</div>' +
+      '<div class="negocio-card-body">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">' +
+          '<h3>' + n.nombre + '</h3>' +
+          (n.categoria ? '<span class="badge badge-negocios">' + n.categoria + '</span>' : '') +
+        '</div>' +
+        '<div class="negocio-card-meta">' +
+          (n.dias     ? '<span>📅 ' + n.dias     + '</span>' : '') +
+          (n.horario  ? '<span>🕐 ' + n.horario  + '</span>' : '') +
+          (n.ubicacion? '<span>📍 ' + n.ubicacion + '</span>' : '') +
+        '</div>' +
+        (n.descripcion ? '<p class="negocio-card-desc">' + n.descripcion + '</p>' : '') +
+        (esMio
+          ? '<div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">' +
+              '<label style="cursor:pointer;font-size:.78rem;color:var(--azul);border:1px solid var(--azul);padding:4px 10px;border-radius:8px">📷 Cambiar foto' +
+                '<input type="file" accept="image/*" style="display:none" onchange="cambiarFotoNegocio(' + n.id + ', this)">' +
+              '</label>' +
+              '<button onclick="eliminarNegocio(' + n.id + ')" style="font-size:.78rem;color:#c0392b;border:1px solid #c0392b;padding:4px 10px;border-radius:8px;background:none;cursor:pointer">🗑 Eliminar</button>' +
+            '</div>'
+          : '') +
+      '</div>' +
+    '</div>'
+  );
+}
+
+function cambiarFotoNegocio(id, input) {
+  var file = input.files[0];
+  if (!file) return;
+  var fd = new FormData();
+  fd.append('foto', file);
+  fetch(API + '/negocios/' + id + '/foto', { method: 'PUT', body: fd })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) { showToast('Error: ' + d.error, 'error'); return; }
+      var imgEl = document.querySelector('#neg-img-' + id);
+      if (imgEl) imgEl.innerHTML = '<img src="' + API + '/uploads/' + d.foto + '" alt="foto">';
+      showToast('¡Foto actualizada!', 'success');
+    })
+    .catch(function() { showToast('No se pudo conectar al servidor.', 'error'); });
+}
+
+function eliminarNegocio(id) {
+  showConfirm('¿Eliminar este negocio?', function() {
+    fetch(API + '/negocios/' + id, { method: 'DELETE' })
+      .then(function(r) { return r.json(); })
+      .then(function() { showToast('Negocio eliminado.', 'success'); setTimeout(cargarNegociosDB, 1600); })
+      .catch(function() { showToast('No se pudo conectar al servidor.', 'error'); });
+  });
+}
+
+function abrirModalNegocio() {
+  var usuario = getUsuarioActual();
+  if (!usuario) {
+    showConfirm('Necesitas iniciar sesión para publicar un negocio. ¿Deseas acceder?', function() {
+      window.location.href = 'registro.html';
+    });
+    return;
+  }
+  document.getElementById('modal-negocio').style.display = 'flex';
+}
+
+function cerrarModalNegocio() {
+  document.getElementById('modal-negocio').style.display = 'none';
+}
+
+function previewNegFoto(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var prev = document.getElementById('neg-foto-preview');
+    prev.innerHTML = '<img src="' + e.target.result + '" alt="foto">';
+    prev.dataset.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function submitNegocio(e) {
+  e.preventDefault();
+  var usuario   = getUsuarioActual();
+  var usuarioId = usuario ? usuario.id.toString().replace('db_', '') : null;
+  var fotoFile  = document.getElementById('neg-foto').files[0];
+  if (!fotoFile) { showToast('La foto del negocio es obligatoria.', 'warning'); return; }
+
+  // Usar FormData para poder enviar el archivo
+  var fd = new FormData();
+  if (parseInt(usuarioId)) fd.append('usuario_id',  usuarioId);
+  fd.append('nombre',      document.getElementById('neg-nombre').value.trim());
+  fd.append('categoria',   document.getElementById('neg-categoria').value);
+  fd.append('descripcion', document.getElementById('neg-descripcion').value.trim());
+  fd.append('dias',        document.getElementById('neg-dias').value.trim());
+  fd.append('horario',     document.getElementById('neg-horario').value.trim());
+  fd.append('ubicacion',   document.getElementById('neg-ubicacion').value.trim());
+  if (fotoFile) fd.append('foto', fotoFile);
+
+  fetch(API + '/negocios', { method: 'POST', body: fd })
+    .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+    .then(function(r) {
+      if (!r.ok) { showToast('Error: ' + (r.data.error || 'No se pudo guardar.'), 'error'); return; }
+      cerrarModalNegocio();
+      showToast('¡Negocio publicado exitosamente!', 'success');
+      setTimeout(cargarNegociosDB, 1600);
+    })
+    .catch(function() { showToast('No se pudo conectar al servidor.', 'error'); });
+}
+
+function renderNegocioCardSeed(l) {
+  var promedio = getPromedioEstrellas(l.resenas);
+  var fav = esFavorito(l.id);
+  return (
+    '<div class="negocio-card" id="card-' + l.id + '">' +
+      '<div class="negocio-card-img">' +
+        (l.imagen ? '<img src="' + l.imagen + '" alt="' + l.nombre + '">' : '🏢') +
+      '</div>' +
+      '<div class="negocio-card-body">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">' +
+          '<h3>' + l.nombre + '</h3>' +
+          '<span class="badge badge-negocios">Negocio</span>' +
+        '</div>' +
+        '<p class="negocio-card-desc">' + l.descripcion + '</p>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">' +
+          '<span class="estrellas" style="font-size:.82rem">' + renderEstrellas(promedio) +
+            ' <small>(' + l.resenas.length + ')</small>' +
+          '</span>' +
+          '<button class="btn-fav' + (fav ? ' fav-activo' : '') + '" onclick="handleToggleFav(\'' + l.id + '\', this)">' +
+            (fav ? '♥' : '♡') + ' Favorito' +
+          '</button>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  );
+}
+
+function filtrar(query) {
+  var q = query.toLowerCase();
+  var filtrado = lugaresNeg.filter(function(l) {
+    return l.nombre.toLowerCase().includes(q) || l.descripcion.toLowerCase().includes(q);
+  });
+  document.getElementById('negocios-seed').innerHTML =
+    filtrado.map(function(l) { return renderNegocioCardSeed(l); }).join('');
+}
+
+// Cerrar modal al click fuera
+document.getElementById('modal-negocio').addEventListener('click', function(e) {
+  if (e.target === this) cerrarModalNegocio();
+});
+</script>
+</body>
+</html>

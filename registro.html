@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceder – UANL Explora</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <h1>UANL <span>EXPLORA</span></h1>
+      <p>Accede o crea tu cuenta universitaria</p>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login"    onclick="switchTab('login')">Iniciar sesión</button>
+      <button class="auth-tab"        id="tab-register" onclick="switchTab('register')">Crear cuenta</button>
+    </div>
+
+    <div id="error-msg" class="auth-error"></div>
+
+    <!-- ===== LOGIN ===== -->
+    <form id="form-login" class="auth-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label>Nombre de usuario</label>
+        <input type="text" id="login-usuario" placeholder="Tu nombre de usuario" required>
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" id="login-password" placeholder="••••••••" required>
+      </div>
+      <button type="submit" class="btn-primary">Iniciar sesión</button>
+    </form>
+
+    <!-- ===== REGISTRO ===== -->
+    <form id="form-register" class="auth-form" onsubmit="handleRegister(event)" style="display:none">
+      <div class="form-group">
+        <label>Nombre <span style="color:#e74c3c">*</span></label>
+        <input type="text" id="reg-nombre" placeholder="Tu nombre" required>
+      </div>
+      <div class="form-group">
+        <label>Apellido <span style="color:#e74c3c">*</span></label>
+        <input type="text" id="reg-apellido" placeholder="Tu apellido" required>
+      </div>
+      <div class="form-group">
+        <label>Nombre de usuario <span style="color:#e74c3c">*</span></label>
+        <input type="text" id="reg-usuario" placeholder="Elige un nombre de usuario único" required>
+      </div>
+      <div class="form-group">
+        <label>Contraseña <span style="color:#e74c3c">*</span></label>
+        <input type="password" id="reg-password" placeholder="Mínimo 6 caracteres" required>
+        <span class="hint">Al menos 6 caracteres</span>
+      </div>
+      <div class="form-group">
+        <label>Foto de perfil <span style="font-weight:400;text-transform:none;font-size:.82rem">(opcional)</span></label>
+        <div class="foto-preview-wrap">
+          <div class="foto-preview" id="foto-preview">👤</div>
+          <input type="file" id="reg-foto" accept="image/*" onchange="previewFoto(this)">
+        </div>
+      </div>
+      <button type="submit" class="btn-primary">Crear cuenta</button>
+    </form>
+
+    <p class="auth-back"><a href="index.html">← Volver al inicio</a></p>
+
+  </div>
+</div>
+
+<script src="script.js"></script>
+<script>
+// Si ya hay sesión activa, redirigir
+document.addEventListener('DOMContentLoaded', function() {
+  if (getSession()) window.location.href = 'populares.html';
+});
+
+function switchTab(tab) {
+  document.getElementById('form-login').style.display    = tab === 'login'    ? 'flex' : 'none';
+  document.getElementById('form-register').style.display = tab === 'register' ? 'flex' : 'none';
+  document.getElementById('tab-login').classList.toggle('active',    tab === 'login');
+  document.getElementById('tab-register').classList.toggle('active', tab === 'register');
+  clearError();
+}
+
+function showError(msg) {
+  var el = document.getElementById('error-msg');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+function clearError() {
+  document.getElementById('error-msg').style.display = 'none';
+}
+
+function previewFoto(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var preview = document.getElementById('foto-preview');
+    preview.innerHTML = '<img src="' + e.target.result + '" alt="foto">';
+    preview.dataset.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+var API = 'http://localhost:3000';
+
+function handleLogin(e) {
+  e.preventDefault();
+  clearError();
+  var usuario  = document.getElementById('login-usuario').value.trim();
+  var password = document.getElementById('login-password').value;
+
+  fetch(API + '/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ usuario: usuario, password: password })
+  })
+  .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+  .then(function(r) {
+    if (!r.ok) { showError(r.data.error || 'Error al iniciar sesión.'); return; }
+    // Guardar en localStorage para uso offline/session
+    var user = { id: 'db_' + r.data.id, nombre: r.data.nombre, apellido: r.data.apellido,
+                 usuario: r.data.usuario, foto: r.data.foto || null };
+    guardarUsuarioLocal(user);
+    setSession(user.id);
+    window.location.href = 'populares.html';
+  })
+  .catch(function() { showError('No se pudo conectar al servidor. Verifica que esté corriendo.'); });
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  clearError();
+  var nombre   = document.getElementById('reg-nombre').value.trim();
+  var apellido = document.getElementById('reg-apellido').value.trim();
+  var usuario  = document.getElementById('reg-usuario').value.trim();
+  var password = document.getElementById('reg-password').value;
+  var fotoEl   = document.getElementById('foto-preview');
+  var foto     = fotoEl.dataset.src || null;
+
+  if (!nombre || !apellido || !usuario || !password) {
+    showError('Por favor completa todos los campos obligatorios.'); return;
+  }
+  if (password.length < 6) {
+    showError('La contraseña debe tener al menos 6 caracteres.'); return;
+  }
+
+  fetch(API + '/registro', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nombre: nombre, apellido: apellido, usuario: usuario, password: password, foto: foto })
+  })
+  .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
+  .then(function(r) {
+    if (!r.ok) { showError(r.data.error || 'Error al crear la cuenta.'); return; }
+    var user = { id: 'db_' + r.data.id, nombre: r.data.nombre, apellido: r.data.apellido,
+                 usuario: r.data.usuario, foto: r.data.foto || null };
+    guardarUsuarioLocal(user);
+    setSession(user.id);
+    window.location.href = 'populares.html';
+  })
+  .catch(function() { showError('No se pudo conectar al servidor. Verifica que esté corriendo.'); });
+}
+
+// Guarda el usuario en localStorage (para sesión y uso offline)
+function guardarUsuarioLocal(user) {
+  var usuarios = getUsuarios();
+  var existe = false;
+  for (var i = 0; i < usuarios.length; i++) {
+    if (usuarios[i].id === user.id) { usuarios[i] = user; existe = true; break; }
+  }
+  if (!existe) usuarios.push(user);
+  localStorage.setItem('uanl_usuarios', JSON.stringify(usuarios));
+}
+</script>
+</body>
+</html>

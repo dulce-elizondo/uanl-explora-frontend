@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UANL Explora</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: 'Inter', 'Segoe UI', Arial, sans-serif; }
+  </style>
+</head>
+<body>
+
+<!-- ===== HERO ===== -->
+<section class="landing-hero">
+
+  <!-- Fondo con parallax -->
+  <div class="hero-bg" id="hero-bg"></div>
+
+  <!-- Topbar transparente -->
+  <div class="landing-topbar" id="landing-topbar">
+    <div class="landing-logo">UANL <span class="gold">EXPLORA</span></div>
+    <button class="btn-acceder-hero" onclick="window.location.href='registro.html'">Acceder</button>
+  </div>
+
+  <!-- Centro -->
+  <div class="landing-center">
+    <h1 class="landing-title">UANL <span class="gold">EXPLORA</span></h1>
+    <p class="landing-subtitle">Descubre cafeterías, negocios, baños y más dentro del campus universitario.</p>
+
+    <!-- Barra de búsqueda principal -->
+    <div class="hero-search-wrap" id="hero-search-wrap">
+      <div class="hero-searchbar">
+        <input type="text" id="hero-search-input" placeholder="🔍  Buscar lugar, cafetería, negocio..."
+          onkeydown="heroSearch(event)" onfocus="abrirCatsHero()" autocomplete="off">
+        <button class="hero-searchbar-btn" onclick="heroSearchGo()">Buscar</button>
+      </div>
+
+      <!-- Dropdown de categorías (aparece al tocar el buscador) -->
+      <div class="hero-cats-dropdown" id="hero-cats-dropdown">
+        <div class="hero-cats-title">Explorar categorías</div>
+        <div class="hero-cats-grid">
+          <a href="populares.html"  class="hero-cat-chip"><span>⭐</span> Populares</a>
+          <a href="cafeterias.html" class="hero-cat-chip"><span>☕</span> Cafeterías</a>
+          <a href="comida.html"     class="hero-cat-chip"><span>🍽️</span> Comida</a>
+          <a href="negocios.html"   class="hero-cat-chip"><span>🏢</span> Negocios</a>
+          <a href="banos.html"      class="hero-cat-chip"><span>🚻</span> Baños</a>
+          <a href="internet.html"   class="hero-cat-chip"><span>📶</span> Internet</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll hint -->
+
+
+</section>
+
+<!-- ===== SECCIONES ===== -->
+<div class="landing-sections">
+
+  <!-- Sobre la app -->
+  <div class="section-about">
+    <div class="section-about-text">
+      <h2>¿Qué es UANL Explora?</h2>
+      <p>Una plataforma diseñada para los estudiantes y visitantes de la Universidad Autónoma de Nuevo León. Encuentra cafeterías, baños, negocios y los lugares más populares del campus. Lee reseñas de otros alumnos, guarda tus favoritos y comparte tu propia experiencia.</p>
+    </div>
+    <div class="section-about-icon">🎓</div>
+  </div>
+
+  <!-- Listón decorativo -->
+  <div class="section-liston">
+    <span class="liston-icon">🎓</span>
+    <p>Descubre, explora y comparte los mejores lugares del campus de la <strong>Universidad Autónoma de Nuevo León</strong></p>
+    <span class="liston-icon">📍</span>
+  </div>
+
+  <!-- Categorías Bento Grid -->
+  <div class="section-categorias">
+    <h2>Explora por categoría</h2>
+    <p class="section-sub">Encuentra exactamente lo que necesitas en el campus</p>
+
+    <div class="bento-grid">
+      <a href="populares.html"  class="bento-card bento-populares">
+        <div class="cat-icon">⭐</div>
+        <div class="cat-name">Populares</div>
+      </a>
+      <a href="cafeterias.html" class="bento-card bento-cafeterias">
+        <div class="cat-icon">☕</div>
+        <div class="cat-name">Cafeterías</div>
+      </a>
+      <a href="comida.html"     class="bento-card bento-comida">
+        <div class="cat-icon">🍽️</div>
+        <div class="cat-name">Comida</div>
+      </a>
+      <a href="negocios.html"   class="bento-card bento-negocios">
+        <div class="cat-icon">🏢</div>
+        <div class="cat-name">Negocios</div>
+      </a>
+      <a href="banos.html"      class="bento-card bento-banos">
+        <div class="cat-icon">🚻</div>
+        <div class="cat-name">Baños</div>
+      </a>
+      <a href="internet.html"   class="bento-card bento-internet">
+        <div class="cat-icon">📶</div>
+        <div class="cat-name">Internet</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Destacados -->
+  <div class="section-destacados">
+    <h2>Lugares destacados</h2>
+    <div class="destacados-grid" id="destacados-grid">
+      <p style="color:var(--texto-suave)">Cargando...</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer class="landing-footer">
+  <p><strong>UANL EXPLORA</strong> &mdash; Universidad Autónoma de Nuevo León</p>
+  <p style="margin-top:6px;font-size:.82rem">Hecho por y para la comunidad universitaria</p>
+</footer>
+
+<script src="script.js"></script>
+<script>
+// Parallax
+var heroBg = document.getElementById('hero-bg');
+window.addEventListener('scroll', function() {
+  var scrollY = window.scrollY;
+  // Topbar scrolled
+  var topbar = document.getElementById('landing-topbar');
+  if (scrollY > 40) topbar.classList.add('scrolled');
+  else topbar.classList.remove('scrolled');
+  // Parallax: mover fondo más lento que el scroll
+  if (heroBg) heroBg.style.transform = 'translateY(' + (scrollY * 0.35) + 'px)';
+}, { passive: true });
+
+// Dropdown categorías del buscador
+function abrirCatsHero() {
+  document.getElementById('hero-cats-dropdown').classList.add('open');
+}
+document.addEventListener('click', function(e) {
+  var wrap = document.getElementById('hero-search-wrap');
+  if (wrap && !wrap.contains(e.target)) {
+    var dd = document.getElementById('hero-cats-dropdown');
+    if (dd) dd.classList.remove('open');
+  }
+});
+
+// Búsqueda hero
+function heroSearch(e) {
+  if (e.key === 'Enter') heroSearchGo();
+}
+function heroSearchGo() {
+  var q = document.getElementById('hero-search-input').value.trim();
+  if (!q) return;
+  window.location.href = 'populares.html?q=' + encodeURIComponent(q);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var top3 = getTop10().slice(0, 3);
+  var grid = document.getElementById('destacados-grid');
+  if (!top3.length) { grid.innerHTML = '<p style="color:var(--texto-suave)">Sin datos aún.</p>'; return; }
+  grid.innerHTML = top3.map(function(l) {
+    return '<div class="dest-card">' +
+      '<div class="dest-card-img">' + getCategoryIcon(l.categoria) + '</div>' +
+      '<div class="dest-card-body">' +
+        '<h3>' + l.nombre + '</h3>' +
+        '<p>' + l.descripcion.slice(0, 90) + '...</p>' +
+        '<div class="dest-card-stars">' + renderEstrellas(l.promedio) +
+          ' <small>(' + l.resenas.length + ' reseñas)</small>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+});
+</script>
+</body>
+</html>

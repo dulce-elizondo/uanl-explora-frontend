@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Migración – UANL Explora</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; }
+    h2 { color: #003087; }
+    button { background: #003087; color: white; border: none; padding: 14px 32px;
+             font-size: 1rem; border-radius: 8px; cursor: pointer; }
+    button:hover { background: #1a5ca8; }
+    button:disabled { background: #999; cursor: not-allowed; }
+    #log { margin-top: 24px; border: 1px solid #ddd; border-radius: 8px;
+           padding: 16px; background: #f9f9f9; min-height: 80px; font-size: .88rem; line-height: 1.8; }
+    .ok  { color: #155724; }
+    .err { color: #721c24; }
+    .fin { color: #003087; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Migración de lugares a MySQL</h2>
+  <p>Este botón inserta todos los lugares del seed data en tu base de datos. <strong>Úsalo una sola vez.</strong></p>
+  <button id="btn" onclick="migrar()">Migrar lugares ahora</button>
+  <div id="log">Esperando...</div>
+
+<script src="script.js"></script>
+<script>
+var API = 'http://localhost:3000';
+
+function log(msg, tipo) {
+  var div = document.getElementById('log');
+  div.innerHTML += '<span class="' + (tipo||'') + '">' + msg + '</span><br>';
+}
+
+async function migrar() {
+  var btn = document.getElementById('btn');
+  btn.disabled = true;
+  document.getElementById('log').innerHTML = '';
+
+  // Tomar lugares del localStorage (incluye seed data)
+  var lugares = getLugares();
+  log('Se encontraron ' + lugares.length + ' lugares en localStorage.');
+
+  var exitosos = 0;
+  var errores  = 0;
+
+  for (var i = 0; i < lugares.length; i++) {
+    var l = lugares[i];
+    try {
+      var res = await fetch(API + '/lugares', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre:      l.nombre,
+          categoria:   l.categoria,
+          descripcion: l.descripcion,
+          imagen:      l.imagen || null
+        })
+      });
+      var data = await res.json();
+      if (!res.ok) {
+        log('✗ ' + l.nombre + ' — ' + (data.error || 'error'), 'err');
+        errores++;
+      } else {
+        log('✓ ' + l.nombre + ' (id MySQL: ' + data.id + ')', 'ok');
+        exitosos++;
+      }
+    } catch(e) {
+      log('✗ ' + l.nombre + ' — No se pudo conectar al servidor', 'err');
+      errores++;
+    }
+  }
+
+  log('─────────────────────────', '');
+  log('Migración terminada: ' + exitosos + ' guardados, ' + errores + ' errores.', 'fin');
+  btn.disabled = false;
+}
+</script>
+</body>
+</html>
