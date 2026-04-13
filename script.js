@@ -260,6 +260,50 @@ function getUsuarioActual() {
 function saveUsuarioActual(user) {
   localStorage.setItem('uanl_usuario_actual', JSON.stringify(user));
   setSession(user.id);
+  sincronizarDesdeBackend(user);
+}
+
+function sincronizarDesdeBackend(user) {
+  var usuarioIdNum = user.id.toString().replace('db_', '');
+  if (!parseInt(usuarioIdNum)) return;
+  var API = 'https://uanl-explora-backend.onrender.com';
+
+  // Sincronizar favoritos
+  fetch(API + '/favoritos/' + usuarioIdNum)
+    .then(function(r) { return r.json(); })
+    .then(function(favIds) {
+      if (!Array.isArray(favIds)) return;
+      var favs = JSON.parse(localStorage.getItem('uanl_favoritos') || '{}');
+      favs[user.id] = favIds;
+      localStorage.setItem('uanl_favoritos', JSON.stringify(favs));
+    }).catch(function() {});
+
+  // Sincronizar reseñas del usuario
+  fetch(API + '/resenas/usuario/' + usuarioIdNum)
+    .then(function(r) { return r.json(); })
+    .then(function(resenas) {
+      if (!Array.isArray(resenas)) return;
+      var lugares = JSON.parse(localStorage.getItem('uanl_lugares') || '[]');
+      resenas.forEach(function(r) {
+        if (!r.lugar_id_str) return;
+        var lugar = lugares.find(function(l) { return l.id === r.lugar_id_str; });
+        if (!lugar) return;
+        var yaExiste = lugar.resenas.find(function(re) {
+          return re.autorId === user.id && re.texto === r.comentario;
+        });
+        if (!yaExiste) {
+          lugar.resenas.push({
+            id: 'r_db_' + r.id,
+            autorId: user.id,
+            autor: user.nombre + ' ' + user.apellido,
+            texto: r.comentario,
+            estrellas: r.calificacion,
+            fecha: r.created_at ? r.created_at.toString().slice(0, 10) : ''
+          });
+        }
+      });
+      localStorage.setItem('uanl_lugares', JSON.stringify(lugares));
+    }).catch(function() {});
 }
 
 function logout() {
@@ -330,13 +374,30 @@ function toggleFavorito(lugarId) {
   var favs = JSON.parse(localStorage.getItem('uanl_favoritos') || '{}');
   if (!favs[userId]) favs[userId] = [];
   var idx = favs[userId].indexOf(lugarId);
-  if (idx === -1) {
+  var added = idx === -1;
+  if (added) {
     favs[userId].push(lugarId);
   } else {
     favs[userId].splice(idx, 1);
   }
   localStorage.setItem('uanl_favoritos', JSON.stringify(favs));
-  return idx === -1;
+
+  // Sincronizar con MySQL
+  var usuarioIdNum = userId.toString().replace('db_', '');
+  if (parseInt(usuarioIdNum)) {
+    if (added) {
+      fetch('https://uanl-explora-backend.onrender.com/favoritos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ usuario_id: parseInt(usuarioIdNum), lugar_id_str: lugarId })
+      }).catch(function() {});
+    } else {
+      fetch('https://uanl-explora-backend.onrender.com/favoritos/' + usuarioIdNum + '/' + lugarId, {
+        method: 'DELETE'
+      }).catch(function() {});
+    }
+  }
+  return added;
 }
 
 function esFavorito(lugarId) {
@@ -785,7 +846,7 @@ function submitResena(lugarId) {
     fecha: new Date().toISOString().slice(0, 10)
   });
 
-  // Guardar en MySQL — extraer IDs numéricos
+  // Guardar en MySQL
   var usuarioIdNum = usuario.id.toString().replace('db_', '');
   var lugarIdNum   = lugarId.toString().replace('db_', '').replace('l', '');
 
@@ -793,9 +854,10 @@ function submitResena(lugarId) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      usuario_id:  parseInt(usuarioIdNum) || null,
-      lugar_id:    parseInt(lugarIdNum)   || null,
-      comentario:  texto,
+      usuario_id:   parseInt(usuarioIdNum) || null,
+      lugar_id:     parseInt(lugarIdNum)   || null,
+      lugar_id_str: lugarId,
+      comentario:   texto,
       calificacion: estrellas
     })
   }).catch(function() {
