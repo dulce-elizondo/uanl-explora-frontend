@@ -55,7 +55,7 @@ a {
 .hero-bg {
   position: absolute;
   inset: -10% 0;
-  background-image: url('https://uanl-explora-backend.onrender.com/uploads/uanl-landing.jpg');
+  background-image: url('https://res.cloudinary.com/dsizydbkc/image/upload/uanl-explora/seed/uanl-landing.jpg');
   background-size: cover;
   background-position: center 30%;
   will-change: transform;
