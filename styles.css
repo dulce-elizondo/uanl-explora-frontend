@@ -2689,22 +2689,23 @@ body.dark-mode .uanl-confirm-cancel:hover {
    Tonos celeste / azul cielo – misma estructura, paleta clara
    ============================================================ */
 
-/* Hero: azul-grisáceo medio, tipo steel blue */
+/* Hero: base cyan-teal vibrante */
 body:not(.dark-mode) .landing-hero {
-  background: #4a6e8a;
+  background: #0abccc;
 }
 
 body:not(.dark-mode) .hero-bg {
-  background: #4a6e8a;
+  background: #0abccc;
 }
 
-/* Orbes suaves: azul-gris + teal apagado (misma gama de la captura) */
+/* Orbes cyan-turquesa-azul eléctrico */
 body:not(.dark-mode) .hero-bg::after {
   background:
-    radial-gradient(ellipse 80% 70% at 0% 0%,    rgba(50, 90, 140, .7)  0%, transparent 60%),
-    radial-gradient(ellipse 70% 60% at 100% 100%, rgba(70, 140, 170, .6) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 50% at 50% 50%,   rgba(100,160, 190, .3) 0%, transparent 65%),
-    radial-gradient(ellipse 40% 40% at 80% 10%,   rgba(40, 80, 120, .4)  0%, transparent 50%);
+    radial-gradient(ellipse 75% 65% at 5%  10%,  rgba(0,  200, 230, .85) 0%, transparent 60%),
+    radial-gradient(ellipse 65% 75% at 95% 90%,  rgba(0,  160, 210, .75) 0%, transparent 60%),
+    radial-gradient(ellipse 55% 55% at 55% 50%,  rgba(30, 210, 200, .5)  0%, transparent 65%),
+    radial-gradient(ellipse 45% 45% at 80% 5%,   rgba(0,  180, 240, .6)  0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 20% 85%,  rgba(20, 230, 210, .5)  0%, transparent 55%);
 }
 
 /* Puntos más visibles sobre fondo claro */
@@ -2822,7 +2823,7 @@ body:not(.dark-mode) .hero-cats-grid .hero-cat-chip:hover {
 
 /* ---- Secciones landing claro ---- */
 body:not(.dark-mode) .landing-sections {
-  background: #3a5a72;
+  background: #0899a8;
 }
 
 body:not(.dark-mode) .section-about-text h2 {
@@ -2853,10 +2854,10 @@ body:not(.dark-mode) .section-liston p {
 /* Sección categorías */
 body:not(.dark-mode) .section-categorias {
   background:
-    radial-gradient(ellipse 80% 60% at 0% 50%,   rgba(40, 80, 130, .5) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 70% at 100% 20%,  rgba(60, 130, 170, .4) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 50% 110%,  rgba(80, 150, 180, .3) 0%, transparent 60%),
-    #3a5a72;
+    radial-gradient(ellipse 80% 60% at 0% 50%,   rgba(0, 180, 220, .55) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 70% at 100% 20%,  rgba(0, 210, 200, .45) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 110%,  rgba(0, 200, 230, .35) 0%, transparent 60%),
+    #0899a8;
 }
 
 body:not(.dark-mode) .section-categorias-inner {
@@ -2929,9 +2930,9 @@ body:not(.dark-mode) .dest-card-stars small {
 
 /* Footer */
 body:not(.dark-mode) .landing-footer {
-  background: #2a4558;
-  border-top-color: rgba(100,160,200,.15);
-  color: rgba(180,215,235,.6);
+  background: #077585;
+  border-top-color: rgba(0,200,220,.2);
+  color: rgba(200,245,250,.65);
 }
 
 body:not(.dark-mode) .landing-footer strong {
