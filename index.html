@@ -22,6 +22,27 @@
   <!-- Canvas de puntos interactivos -->
   <canvas id="hero-dot-canvas"></canvas>
 
+  <!-- Estrellas sparkle decorativas (modo claro) -->
+  <svg class="hero-sparkles-light" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" aria-hidden="true">
+    <!-- Estrella grande -->
+    <g transform="translate(270,210)">
+      <path d="M0,-32 C3.5,-8 8,-3.5 32,0 C8,3.5 3.5,8 0,32 C-3.5,8 -8,3.5 -32,0 C-8,-3.5 -3.5,-8 0,-32Z"
+        fill="#ffffff" opacity=".95"/>
+      <path d="M0,-32 C1,-11 3,-5 0,0 C-3,-5 -1,-11 0,-32Z" fill="rgba(255,255,255,.6)"/>
+    </g>
+    <!-- Estrella mediana -->
+    <g transform="translate(330,170)">
+      <path d="M0,-18 C2,-4.5 4.5,-2 18,0 C4.5,2 2,4.5 0,18 C-2,4.5 -4.5,2 -18,0 C-4.5,-2 -2,-4.5 0,-18Z"
+        fill="#ffffff" opacity=".88"/>
+      <path d="M0,-18 C.6,-6 1.8,-2.5 0,0 C-1.8,-2.5 -.6,-6 0,-18Z" fill="rgba(255,255,255,.55)"/>
+    </g>
+    <!-- Estrella pequeña -->
+    <g transform="translate(310,255)">
+      <path d="M0,-11 C1.2,-2.8 2.8,-1.2 11,0 C2.8,1.2 1.2,2.8 0,11 C-1.2,2.8 -2.8,1.2 -11,0 C-2.8,-1.2 -1.2,-2.8 0,-11Z"
+        fill="#ffffff" opacity=".80"/>
+    </g>
+  </svg>
+
   <!-- Topbar transparente -->
   <div class="landing-topbar" id="landing-topbar">
     <div class="landing-logo">UANL <span class="gold">EXPLORA</span></div>
@@ -87,8 +108,8 @@
   <!-- Categorías Bento Grid -->
   <div class="section-categorias">
 
-    <!-- Decoración de fondo: orbe azul + anillos + estrellas sparkle -->
-    <svg class="cats-bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <!-- Decoración modo oscuro: orbe azul + anillos orbitales + estrellas metálicas -->
+    <svg class="cats-bg-svg cats-bg-dark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
         <!-- Orbe azul central -->
         <radialGradient id="orbGlow" cx="50%" cy="50%" r="50%">
@@ -153,6 +174,49 @@
         <path d="M0,-10 C1,-2.5 2.5,-1 10,0 C2.5,1 1,2.5 0,10 C-1,2.5 -2.5,1 -10,0 C-2.5,-1 -1,-2.5 0,-10Z"
           fill="url(#starMetal2)"/>
         <path d="M0,-10 C.4,-3 1,-1.5 0,0 C-1,-1.5 -.4,-3 0,-10Z" fill="rgba(255,255,255,.40)"/>
+      </g>
+    </svg>
+
+    <!-- Decoración modo claro: orbe blanco suave + estrellas sparkle blancas -->
+    <svg class="cats-bg-svg cats-bg-light" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <!-- Fondo degradado azul-lavanda -->
+        <linearGradient id="bgLight" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"   stop-color="#7b9fd4"/>
+          <stop offset="45%"  stop-color="#8fb2df"/>
+          <stop offset="100%" stop-color="#6a8ec8"/>
+        </linearGradient>
+        <!-- Orbe circular blanco/celeste difuminado -->
+        <radialGradient id="orbLight" cx="42%" cy="55%" r="48%">
+          <stop offset="0%"   stop-color="#ffffff" stop-opacity=".80"/>
+          <stop offset="30%"  stop-color="#d8e8f8" stop-opacity=".55"/>
+          <stop offset="65%"  stop-color="#b0c8e8" stop-opacity=".25"/>
+          <stop offset="100%" stop-color="#8aaed8" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Fondo completo -->
+      <rect width="1000" height="420" fill="url(#bgLight)"/>
+
+      <!-- Orbe/arco blanco difuminado (igual que la imagen) -->
+      <ellipse cx="420" cy="260" rx="310" ry="290" fill="url(#orbLight)" filter="url(#blurLight)"/>
+      <filter id="blurLight">
+        <feGaussianBlur stdDeviation="18"/>
+      </filter>
+      <ellipse cx="420" cy="260" rx="310" ry="290" fill="url(#orbLight)" filter="url(#blurLight)"/>
+
+      <!-- Estrella sparkle blanca — superior centro-derecha -->
+      <g transform="translate(600,105)">
+        <path d="M0,-18 C2,-4.5 4.5,-2 18,0 C4.5,2 2,4.5 0,18 C-2,4.5 -4.5,2 -18,0 C-4.5,-2 -2,-4.5 0,-18Z"
+          fill="#ffffff" opacity=".95"/>
+        <path d="M0,-18 C.6,-6 1.8,-2.5 0,0 C-1.8,-2.5 -.6,-6 0,-18Z" fill="rgba(255,255,255,.6)"/>
+      </g>
+
+      <!-- Estrella sparkle blanca pequeña — inferior izquierda -->
+      <g transform="translate(175,360)">
+        <path d="M0,-11 C1.2,-2.8 2.8,-1.2 11,0 C2.8,1.2 1.2,2.8 0,11 C-1.2,2.8 -2.8,1.2 -11,0 C-2.8,-1.2 -1.2,-2.8 0,-11Z"
+          fill="#ffffff" opacity=".90"/>
+        <path d="M0,-11 C.4,-3.5 1,-1.5 0,0 C-1,-1.5 -.4,-3.5 0,-11Z" fill="rgba(255,255,255,.55)"/>
       </g>
     </svg>
 
