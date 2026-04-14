@@ -237,20 +237,27 @@ a {
   line-height: 1.05;
   margin-bottom: 18px;
   animation: fadeUp .8s .1s ease both;
-}
-
-.landing-title .word-uanl {
-  color: #fff;
-  text-shadow: 0 0 40px rgba(100,160,255,.4);
-}
-
-.landing-title .gold {
-  background: linear-gradient(90deg, #f0d474 0%, #fff8c0 40%, #C9A84C 70%, #f0d474 100%);
-  background-size: 200% auto;
+  /* Efecto metálico líquido azul */
+  background: linear-gradient(180deg,
+    #a8dcff 0%,
+    #60b8f8 18%,
+    #1a80e0 38%,
+    #0858b8 52%,
+    #1878d8 68%,
+    #4aaaf0 82%,
+    #c0e8ff 100%
+  );
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  animation: shineText 4s linear infinite;
+  filter: url(#liquid-metal);
+  text-shadow: none;
+}
+
+.landing-title .gold {
+  background: none;
+  -webkit-text-fill-color: inherit;
+  animation: none;
 }
 
 @keyframes shineText {
@@ -2859,15 +2866,13 @@ body:not(.dark-mode) .landing-title .word-uanl {
 }
 
 body:not(.dark-mode) .landing-title .gold {
-  background: linear-gradient(90deg, #1535c8 0%, #2a50d8 45%, #1535c8 80%);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  background: none;
+  -webkit-text-fill-color: #0a2060;
+  color: #0a2060;
 }
 
 body:not(.dark-mode) .landing-subtitle {
-  color: rgba(10, 35, 100, .70);
+  color: #0a2060;
 }
 
 /* Buscador */

@@ -52,6 +52,38 @@
     </div>
   </div>
 
+  <!-- Filtros SVG para efecto metálico líquido en el título -->
+  <svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+    <defs>
+      <filter id="liquid-metal" x="-5%" y="-15%" width="110%" height="140%" color-interpolation-filters="sRGB">
+        <!-- Distorsión líquida suave -->
+        <feTurbulence type="turbulence" baseFrequency="0.018 0.032" numOctaves="4" seed="5" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="7" xChannelSelector="R" yChannelSelector="G" result="warped"/>
+        <!-- Iluminación especular para el brillo metálico -->
+        <feGaussianBlur in="warped" stdDeviation="1.2" result="blurred"/>
+        <feSpecularLighting in="blurred" surfaceScale="5" specularConstant="1.4" specularExponent="28"
+          lighting-color="#a8d8ff" result="specular">
+          <fePointLight x="200" y="-120" z="180"/>
+        </feSpecularLighting>
+        <feComposite in="specular" in2="warped" operator="in" result="specularClipped"/>
+        <feBlend in="warped" in2="specularClipped" mode="screen" result="metallic"/>
+        <!-- Sombra interior para profundidad 3D -->
+        <feDropShadow dx="0" dy="3" stdDeviation="2" flood-color="#082060" flood-opacity=".55" result="withShadow"/>
+      </filter>
+
+      <!-- Gradiente metálico azul del título -->
+      <linearGradient id="metalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%"   stop-color="#a8dcff"/>
+        <stop offset="18%"  stop-color="#60b8f8"/>
+        <stop offset="38%"  stop-color="#1a80e0"/>
+        <stop offset="52%"  stop-color="#0858b8"/>
+        <stop offset="68%"  stop-color="#1878d8"/>
+        <stop offset="82%"  stop-color="#4aaaf0"/>
+        <stop offset="100%" stop-color="#c0e8ff"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
   <!-- Centro -->
   <div class="landing-center">
     <div class="hero-badge"><span class="hero-badge-dot"></span>Universidad Autónoma de Nuevo León</div>
