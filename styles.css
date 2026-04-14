@@ -2861,6 +2861,8 @@ body:not(.dark-mode) .hero-badge-dot {
 
 /* Título */
 body:not(.dark-mode) .landing-title .word-uanl {
+  background: none;
+  -webkit-text-fill-color: #0a2060;
   color: #0a2060;
   text-shadow: none;
 }
