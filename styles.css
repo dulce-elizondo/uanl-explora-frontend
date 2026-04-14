@@ -49,44 +49,47 @@ a {
   background: #050d1a;
 }
 
-/* Imagen de fondo con parallax + overlay oscuro */
+/* Fondo puro: mesh gradients dinámicos sin imagen */
 .hero-bg {
   position: absolute;
-  inset: -10% 0;
-  background-image: url('https://res.cloudinary.com/dsizydbkc/image/upload/uanl-explora/seed/uanl-landing.jpg');
-  background-size: cover;
-  background-position: center 30%;
+  inset: 0;
   will-change: transform;
   z-index: 0;
-  filter: brightness(.35) saturate(1.2);
+  background: #050d1a;
 }
 
-/* Mesh gradient animado encima de la foto */
+/* Orbes de color animados (capa 1) */
 .hero-bg::after {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 80% 60% at 15% 20%, rgba(0, 80, 255, .35) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 85% 75%, rgba(100, 0, 200, .3) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(0, 180, 255, .12) 0%, transparent 70%);
-  animation: meshMove 12s ease-in-out infinite alternate;
+    radial-gradient(ellipse 70% 55% at 10% 15%,  rgba(0, 100, 255, .55) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 70% at 88% 80%,  rgba(80, 0, 220, .45) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 45% at 55% 100%, rgba(0, 180, 255, .3) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 10%,  rgba(0, 220, 200, .2) 0%, transparent 50%);
+  animation: orbeMove 14s ease-in-out infinite alternate;
+  filter: blur(2px);
 }
 
-@keyframes meshMove {
-  0%   { opacity: .8; transform: scale(1)   translateY(0); }
-  100% { opacity: 1;  transform: scale(1.08) translateY(-20px); }
+@keyframes orbeMove {
+  0%   { transform: scale(1)    translate(0, 0); }
+  33%  { transform: scale(1.06) translate(-18px, 12px); }
+  66%  { transform: scale(.97)  translate(14px, -8px); }
+  100% { transform: scale(1.09) translate(-8px, 18px); }
 }
 
-/* Grid de puntos tipo circuito */
+/* Grid de puntos + segundo orbe secundario (capa 2) */
 .hero-bg::before {
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px);
-  background-size: 32px 32px;
+  background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
+  background-size: 30px 30px;
   z-index: 1;
 }
+
+/* Orbe central suave (capa extra en JS – ver index.html) */
 
 /* ---- TOPBAR ---- */
 .landing-topbar {
@@ -155,6 +158,8 @@ a {
   text-align: center;
   padding: 40px 24px 120px;
   color: #fff;
+  transition: transform .08s linear;
+  will-change: transform;
 }
 
 @keyframes fadeUp {
@@ -339,15 +344,15 @@ a {
 /* Dropdown categorías */
 .hero-cats-dropdown {
   position: absolute;
-  top: calc(100% + 10px);
-  left: 0; right: 0;
-  background: rgba(10,20,40,.92);
+  top: calc(100% + 8px);
+  left: 10%; right: 10%;
+  background: rgba(8,16,36,.88);
   border: 1px solid rgba(255,255,255,.12);
-  border-radius: 20px;
-  box-shadow: 0 16px 48px rgba(0,0,0,.6);
-  padding: 16px 18px 18px;
+  border-radius: 16px;
+  box-shadow: 0 12px 36px rgba(0,0,0,.55);
+  padding: 12px 14px 14px;
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(-6px);
   pointer-events: none;
   transition: opacity .2s, transform .2s;
   z-index: 50;

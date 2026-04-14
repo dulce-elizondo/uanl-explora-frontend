@@ -130,17 +130,35 @@
 
 <script src="script.js"></script>
 <script>
-// Parallax
-var heroBg = document.getElementById('hero-bg');
+// Topbar scroll
 window.addEventListener('scroll', function() {
-  var scrollY = window.scrollY;
-  // Topbar scrolled
   var topbar = document.getElementById('landing-topbar');
-  if (scrollY > 40) topbar.classList.add('scrolled');
+  if (window.scrollY > 40) topbar.classList.add('scrolled');
   else topbar.classList.remove('scrolled');
-  // Parallax: mover fondo más lento que el scroll
-  if (heroBg) heroBg.style.transform = 'translateY(' + (scrollY * 0.35) + 'px)';
 }, { passive: true });
+
+// Cursor parallax en el centro del hero
+(function() {
+  var center = document.querySelector('.landing-center');
+  var hero   = document.querySelector('.landing-hero');
+  if (!center || !hero) return;
+  var cx = 0, cy = 0, tx = 0, ty = 0;
+  hero.addEventListener('mousemove', function(e) {
+    var r = hero.getBoundingClientRect();
+    var mx = (e.clientX - r.left) / r.width  - 0.5;  // -0.5 a 0.5
+    var my = (e.clientY - r.top)  / r.height - 0.5;
+    tx = mx * 18;   // max ±9px
+    ty = my * 12;
+  });
+  hero.addEventListener('mouseleave', function() { tx = 0; ty = 0; });
+  function raf() {
+    cx += (tx - cx) * 0.08;
+    cy += (ty - cy) * 0.08;
+    center.style.transform = 'translate(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px)';
+    requestAnimationFrame(raf);
+  }
+  raf();
+})();
 
 // Dropdown categorías del buscador
 function abrirCatsHero() {
