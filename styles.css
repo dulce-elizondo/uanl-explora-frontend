@@ -1937,12 +1937,17 @@ body.dark-mode .page-subtitle {
 
 /* Cards */
 body.dark-mode .card {
-  background: #111f30;
-  border: 1px solid #1e3050;
+  background: rgba(255, 255, 255, .045);
+  border: 1px solid rgba(255, 255, 255, .09);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.06);
 }
 
 body.dark-mode .card:hover {
-  box-shadow: 0 4px 20px rgba(0, 212, 255, .12), 0 6px 28px rgba(0, 0, 0, .4);
+  background: rgba(255, 255, 255, .08);
+  border-color: rgba(100, 180, 255, .22);
+  box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(100,180,255,.15), inset 0 1px 0 rgba(255,255,255,.1);
 }
 
 body.dark-mode .card-title {
@@ -2684,22 +2689,22 @@ body.dark-mode .uanl-confirm-cancel:hover {
    Tonos celeste / azul cielo – misma estructura, paleta clara
    ============================================================ */
 
-/* Hero: fondo azul medio (no tan claro) */
+/* Hero: azul-grisáceo medio, tipo steel blue */
 body:not(.dark-mode) .landing-hero {
-  background: #0d2a4e;
+  background: #4a6e8a;
 }
 
 body:not(.dark-mode) .hero-bg {
-  background: #0d2a4e;
+  background: #4a6e8a;
 }
 
-/* Orbes en azul medio / celeste saturado */
+/* Orbes suaves: azul-gris + teal apagado (misma gama de la captura) */
 body:not(.dark-mode) .hero-bg::after {
   background:
-    radial-gradient(ellipse 70% 55% at 10% 15%,  rgba(0, 120, 255, .65) 0%, transparent 55%),
-    radial-gradient(ellipse 55% 70% at 88% 80%,  rgba(0, 180, 230, .55) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 45% at 55% 100%, rgba(0, 200, 220, .4) 0%, transparent 60%),
-    radial-gradient(ellipse 40% 40% at 80% 10%,  rgba(30, 90, 200, .35) 0%, transparent 50%);
+    radial-gradient(ellipse 80% 70% at 0% 0%,    rgba(50, 90, 140, .7)  0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 100% 100%, rgba(70, 140, 170, .6) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 50%,   rgba(100,160, 190, .3) 0%, transparent 65%),
+    radial-gradient(ellipse 40% 40% at 80% 10%,   rgba(40, 80, 120, .4)  0%, transparent 50%);
 }
 
 /* Puntos más visibles sobre fondo claro */
@@ -2815,9 +2820,9 @@ body:not(.dark-mode) .hero-cats-grid .hero-cat-chip:hover {
   color: #fff;
 }
 
-/* ---- Secciones landing claro (fondo azul profundo como el hero) ---- */
+/* ---- Secciones landing claro ---- */
 body:not(.dark-mode) .landing-sections {
-  background: #091e3a;
+  background: #3a5a72;
 }
 
 body:not(.dark-mode) .section-about-text h2 {
@@ -2848,10 +2853,10 @@ body:not(.dark-mode) .section-liston p {
 /* Sección categorías */
 body:not(.dark-mode) .section-categorias {
   background:
-    radial-gradient(ellipse 80% 60% at 0% 50%,   rgba(0, 100, 220, .5) 0%, transparent 55%),
-    radial-gradient(ellipse 70% 70% at 100% 20%,  rgba(0, 170, 230, .4) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 50% 110%,  rgba(0, 180, 200, .3) 0%, transparent 60%),
-    #091e3a;
+    radial-gradient(ellipse 80% 60% at 0% 50%,   rgba(40, 80, 130, .5) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 70% at 100% 20%,  rgba(60, 130, 170, .4) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 110%,  rgba(80, 150, 180, .3) 0%, transparent 60%),
+    #3a5a72;
 }
 
 body:not(.dark-mode) .section-categorias-inner {
@@ -2924,9 +2929,9 @@ body:not(.dark-mode) .dest-card-stars small {
 
 /* Footer */
 body:not(.dark-mode) .landing-footer {
-  background: #060f20;
-  border-top-color: rgba(60,160,255,.1);
-  color: rgba(150,200,240,.5);
+  background: #2a4558;
+  border-top-color: rgba(100,160,200,.15);
+  color: rgba(180,215,235,.6);
 }
 
 body:not(.dark-mode) .landing-footer strong {

@@ -150,7 +150,7 @@ window.addEventListener('scroll', function() {
   var ctx     = canvas.getContext('2d');
   var SPACING = 32;    // separación entre puntos
   var BASE_R  = 1.8;   // radio base del punto
-  var PUSH_R  = 130;   // radio de repulsión del cursor
+  var PUSH_R  = 42;    // radio de repulsión del cursor
   var PUSH_F  = 0.38;  // fuerza de empuje (0..1)
   var SPRING  = 0.08;  // velocidad de retorno al origen
   var DAMPING = 0.72;  // amortiguación de velocidad
@@ -158,7 +158,7 @@ window.addEventListener('scroll', function() {
   function getColors() {
     return document.body.classList.contains('dark-mode')
       ? [[0,160,255],[90,0,230],[0,210,195],[110,180,255],[170,80,255]]
-      : [[10,90,180],[0,130,200],[20,100,210],[0,80,170],[30,110,190]];
+      : [[200,225,245],[160,205,230],[220,235,250],[140,190,220],[180,215,240]];
   }
 
   var mouse = { x: -9999, y: -9999 };
