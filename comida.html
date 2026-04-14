@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderModalSugerir();
   lugares = getLugaresByCategoria('comida');
   renderCards(lugares);
+  aplicarQueryURL(filtrar);
 });
 
 function renderCards(lista) {

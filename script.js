@@ -428,6 +428,27 @@ function getCategoryLabel(cat) {
 }
 
 // =============================================
+// BÚSQUEDA DESDE LANDING (?q=)
+// =============================================
+/**
+ * Lee el parámetro ?q= de la URL, rellena el buscador y filtra automáticamente.
+ * Llama a esta función después de cargar los datos en cada página de categoría.
+ * @param {Function} filtrarFn  – la función filtrar(query) local de la página
+ */
+function aplicarQueryURL(filtrarFn) {
+  var params = new URLSearchParams(window.location.search);
+  var q = params.get('q');
+  if (!q) return;
+  var input = document.getElementById('buscador');
+  if (input) {
+    input.value = q;
+    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    input.focus();
+  }
+  if (typeof filtrarFn === 'function') filtrarFn(q);
+}
+
+// =============================================
 // RENDER HEADER
 // =============================================
 // =============================================

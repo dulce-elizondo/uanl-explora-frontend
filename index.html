@@ -86,6 +86,76 @@
 
   <!-- Categorías Bento Grid -->
   <div class="section-categorias">
+
+    <!-- Decoración de fondo: orbe azul + anillos + estrellas sparkle -->
+    <svg class="cats-bg-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <!-- Orbe azul central -->
+        <radialGradient id="orbGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"   stop-color="#2a7fe8" stop-opacity=".85"/>
+          <stop offset="35%"  stop-color="#1a5abf" stop-opacity=".60"/>
+          <stop offset="70%"  stop-color="#0d3080" stop-opacity=".25"/>
+          <stop offset="100%" stop-color="#050d20" stop-opacity="0"/>
+        </radialGradient>
+        <!-- Gradiente metálico para estrellas -->
+        <radialGradient id="starMetal" cx="35%" cy="28%" r="65%">
+          <stop offset="0%"   stop-color="#d0d8e8" stop-opacity="1"/>
+          <stop offset="20%"  stop-color="#8090b0" stop-opacity="1"/>
+          <stop offset="50%"  stop-color="#1a2035" stop-opacity="1"/>
+          <stop offset="80%"  stop-color="#080c18" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#404860" stop-opacity="1"/>
+        </radialGradient>
+        <radialGradient id="starMetal2" cx="38%" cy="30%" r="62%">
+          <stop offset="0%"   stop-color="#c8d4e6" stop-opacity="1"/>
+          <stop offset="18%"  stop-color="#7080a0" stop-opacity="1"/>
+          <stop offset="48%"  stop-color="#151828" stop-opacity="1"/>
+          <stop offset="78%"  stop-color="#060910" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#383c52" stop-opacity="1"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Orbe resplandeciente -->
+      <ellipse cx="500" cy="210" rx="320" ry="200" fill="url(#orbGlow)"/>
+
+      <!-- Anillo orbital 1 -->
+      <ellipse cx="500" cy="210" rx="380" ry="145"
+        fill="none" stroke="rgba(160,190,230,.30)" stroke-width="1.2"
+        transform="rotate(-8,500,210)"/>
+      <!-- Anillo orbital 2 (ligeramente desplazado) -->
+      <ellipse cx="500" cy="210" rx="365" ry="135"
+        fill="none" stroke="rgba(140,175,220,.20)" stroke-width=".8"
+        transform="rotate(-8,500,210)"/>
+
+      <!-- Estrella sparkle grande — derecha centro -->
+      <g transform="translate(860,195)">
+        <path d="M0,-28 C3,-7 7,-3 28,0 C7,3 3,7 0,28 C-3,7 -7,3 -28,0 C-7,-3 -3,-7 0,-28Z"
+          fill="url(#starMetal)"/>
+        <!-- brillo especular -->
+        <path d="M0,-28 C1,-10 3,-4 0,0 C-3,-4 -1,-10 0,-28Z" fill="rgba(255,255,255,.55)"/>
+      </g>
+
+      <!-- Estrella sparkle pequeña — cerca de la grande -->
+      <g transform="translate(820,155)">
+        <path d="M0,-13 C1.5,-3.5 3.5,-1.5 13,0 C3.5,1.5 1.5,3.5 0,13 C-1.5,3.5 -3.5,1.5 -13,0 C-3.5,-1.5 -1.5,-3.5 0,-13Z"
+          fill="url(#starMetal2)"/>
+        <path d="M0,-13 C.5,-4.5 1.5,-2 0,0 C-1.5,-2 -.5,-4.5 0,-13Z" fill="rgba(255,255,255,.45)"/>
+      </g>
+
+      <!-- Estrella sparkle mediana — izquierda inferior -->
+      <g transform="translate(155,295)">
+        <path d="M0,-22 C2.5,-5.5 5.5,-2.5 22,0 C5.5,2.5 2.5,5.5 0,22 C-2.5,5.5 -5.5,2.5 -22,0 C-5.5,-2.5 -2.5,-5.5 0,-22Z"
+          fill="url(#starMetal)"/>
+        <path d="M0,-22 C.8,-8 2.5,-3 0,0 C-2.5,-3 -.8,-8 0,-22Z" fill="rgba(255,255,255,.50)"/>
+      </g>
+
+      <!-- Estrella sparkle mini — izquierda superior -->
+      <g transform="translate(195,130)">
+        <path d="M0,-10 C1,-2.5 2.5,-1 10,0 C2.5,1 1,2.5 0,10 C-1,2.5 -2.5,1 -10,0 C-2.5,-1 -1,-2.5 0,-10Z"
+          fill="url(#starMetal2)"/>
+        <path d="M0,-10 C.4,-3 1,-1.5 0,0 C-1,-1.5 -.4,-3 0,-10Z" fill="rgba(255,255,255,.40)"/>
+      </g>
+    </svg>
+
     <div class="section-categorias-inner">
     <h2>Explora por categoría</h2>
     <p class="section-sub">Encuentra exactamente lo que necesitas en el campus</p>
@@ -176,7 +246,7 @@ window.addEventListener('scroll', function() {
   function getColors() {
     return document.body.classList.contains('dark-mode')
       ? [[0,160,255],[90,0,230],[0,210,195],[110,180,255],[170,80,255]]
-      : [[255,255,255],[160,200,255],[120,170,240],[200,230,255],[100,160,255]];
+      : [[15,80,140],[30,120,180],[10,60,110],[50,140,200],[20,100,160]];
   }
 
   var mouse = { x: -9999, y: -9999 };
@@ -246,7 +316,7 @@ window.addEventListener('scroll', function() {
       var t = Math.min(1, disp / 28); // 0..1 según cuánto se movió
 
       var col   = COLORS[d.ci];
-      var alpha = dark ? (0.08 + t * 0.82) : (0.22 + t * 0.78);
+      var alpha = dark ? (0.08 + t * 0.82) : (0.10 + t * 0.55);
       var rr    = BASE_R + t * 3.2;
 
       ctx.beginPath();
@@ -292,10 +362,56 @@ document.addEventListener('click', function(e) {
 function heroSearch(e) {
   if (e.key === 'Enter') heroSearchGo();
 }
+
+// Mapa de palabras clave → página de categoría
+var HERO_CATS = [
+  { page: 'cafeterias.html', keys: ['cafeteria','cafetería','café','cafe','cafeterias','cafeterías'] },
+  { page: 'comida.html',     keys: ['comida','tacos','taco','comer','restaurante','restaurant','food','hamburguesa','pizza','torta'] },
+  { page: 'negocios.html',   keys: ['negocio','negocios','tienda','libreria','librería','imprimir','impresiones','copias','papeleria','papelería','servicio'] },
+  { page: 'banos.html',      keys: ['baño','bano','baños','banos','sanitario','sanitarios','wc','toilette'] },
+  { page: 'internet.html',   keys: ['internet','wifi','wi-fi','red','conexion','conexión','señal'] },
+  { page: 'populares.html',  keys: ['popular','populares','top','mejor','mejores','recomendado','recomendados'] },
+];
+
 function heroSearchGo() {
-  var q = document.getElementById('hero-search-input').value.trim();
-  if (!q) return;
-  window.location.href = 'populares.html?q=' + encodeURIComponent(q);
+  var raw = document.getElementById('hero-search-input').value.trim();
+  if (!raw) return;
+  var q = raw.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+  // 1. ¿Coincide exactamente con una categoría?
+  for (var i = 0; i < HERO_CATS.length; i++) {
+    var cat = HERO_CATS[i];
+    for (var j = 0; j < cat.keys.length; j++) {
+      if (q === cat.keys[j] || q.includes(cat.keys[j])) {
+        window.location.href = cat.page;
+        return;
+      }
+    }
+  }
+
+  // 2. ¿Coincide con algún lugar conocido?
+  var todos = getLugares();
+  var normalizar = function(s) {
+    return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  };
+  var match = todos.find(function(l) {
+    return normalizar(l.nombre).includes(q) || normalizar(l.descripcion).includes(q);
+  });
+  if (match) {
+    // Redirigir a la página de su categoría con el query
+    var catPage = {
+      cafeterias: 'cafeterias.html',
+      comida:     'comida.html',
+      negocios:   'negocios.html',
+      banos:      'banos.html',
+      internet:   'internet.html',
+    }[match.categoria] || 'populares.html';
+    window.location.href = catPage + '?q=' + encodeURIComponent(raw);
+    return;
+  }
+
+  // 3. Búsqueda general en populares
+  window.location.href = 'populares.html?q=' + encodeURIComponent(raw);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
