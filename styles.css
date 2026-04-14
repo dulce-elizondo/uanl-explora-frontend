@@ -2806,60 +2806,60 @@ body:not(.dark-mode) .landing-topbar.scrolled {
 }
 
 body:not(.dark-mode) .landing-logo {
-  color: #fff;
+  color: #0a2060;
 }
 
 body:not(.dark-mode) .landing-logo .gold {
-  background: linear-gradient(90deg, #a8d8ff, #fff, #a8d8ff);
+  background: linear-gradient(90deg, #1535c8, #2a50d8, #1535c8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 body:not(.dark-mode) .btn-acceder-hero {
-  background: rgba(255,255,255,.15);
-  color: #fff;
-  border-color: rgba(255,255,255,.35);
+  background: rgba(255,255,255,.40);
+  color: #0a2060;
+  border-color: rgba(10,40,140,.25);
 }
 
 body:not(.dark-mode) .btn-acceder-hero:hover {
-  background: rgba(255,255,255,.28);
-  border-color: rgba(255,255,255,.60);
-  box-shadow: 0 4px 20px rgba(30,80,200,.3);
+  background: rgba(255,255,255,.65);
+  border-color: rgba(21,53,200,.4);
+  box-shadow: 0 4px 20px rgba(21,53,200,.2);
 }
 
 /* Botón tema */
 body:not(.dark-mode) .landing-theme-btn {
-  background: rgba(255,255,255,.15);
-  border-color: rgba(255,255,255,.32);
-  color: #fff;
+  background: rgba(255,255,255,.38);
+  border-color: rgba(10,40,140,.22);
+  color: #0a2060;
 }
 
 body:not(.dark-mode) .landing-theme-btn:hover {
-  background: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.60);
 }
 
 /* Badge */
 body:not(.dark-mode) .hero-badge {
-  background: rgba(255,255,255,.15);
-  border-color: rgba(255,255,255,.30);
-  color: rgba(255,255,255,.92);
+  background: rgba(255,255,255,.35);
+  border-color: rgba(10,40,140,.20);
+  color: #0a2060;
   backdrop-filter: blur(12px);
 }
 
 body:not(.dark-mode) .hero-badge-dot {
-  background: #80d8f0;
-  box-shadow: 0 0 8px rgba(120,210,245,.7);
+  background: #1535c8;
+  box-shadow: 0 0 8px rgba(21,53,200,.5);
 }
 
 /* Título */
 body:not(.dark-mode) .landing-title .word-uanl {
-  color: #fff;
-  text-shadow: 0 2px 20px rgba(30,80,200,.5);
+  color: #0a2060;
+  text-shadow: none;
 }
 
 body:not(.dark-mode) .landing-title .gold {
-  background: linear-gradient(90deg, #a8d8ff 0%, #fff 45%, #a8d8ff 80%);
+  background: linear-gradient(90deg, #1535c8 0%, #2a50d8 45%, #1535c8 80%);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2867,7 +2867,7 @@ body:not(.dark-mode) .landing-title .gold {
 }
 
 body:not(.dark-mode) .landing-subtitle {
-  color: rgba(220, 238, 255, .85);
+  color: rgba(10, 35, 100, .70);
 }
 
 /* Buscador */
