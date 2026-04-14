@@ -142,8 +142,7 @@ function handleRegister(e) {
   var apellido = document.getElementById('reg-apellido').value.trim();
   var usuario  = document.getElementById('reg-usuario').value.trim();
   var password = document.getElementById('reg-password').value;
-  var fotoEl   = document.getElementById('foto-preview');
-  var foto     = fotoEl.dataset.src || null;
+  var fotoFile = document.getElementById('reg-foto').files[0];
 
   if (!nombre || !apellido || !usuario || !password) {
     showError('Por favor completa todos los campos obligatorios.'); return;
@@ -155,10 +154,16 @@ function handleRegister(e) {
   var btn = document.querySelector('#form-register button[type="submit"]');
   if (btn) { btn.disabled = true; btn.textContent = 'Creando cuenta...'; }
 
+  var formData = new FormData();
+  formData.append('nombre', nombre);
+  formData.append('apellido', apellido);
+  formData.append('usuario', usuario);
+  formData.append('password', password);
+  if (fotoFile) formData.append('foto', fotoFile);
+
   fetch(API + '/registro', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nombre: nombre, apellido: apellido, usuario: usuario, password: password, foto: foto })
+    body: formData
   })
   .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
   .then(function(r) {
