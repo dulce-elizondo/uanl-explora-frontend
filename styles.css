@@ -2754,28 +2754,36 @@ body.dark-mode .uanl-confirm-cancel:hover {
    Tonos celeste / azul cielo – misma estructura, paleta clara
    ============================================================ */
 
-/* Hero: base cyan-teal vibrante */
+/* Hero: cielo azul suave estilo imagen */
 body:not(.dark-mode) .landing-hero {
-  background: #b5e8df;
+  background: #a8d8f0;
 }
 
 body:not(.dark-mode) .hero-bg {
-  background: #b5e8df;
+  background:
+    radial-gradient(ellipse 90% 60% at 30% 25%, #e8f4fc 0%, transparent 60%),
+    radial-gradient(ellipse 70% 50% at 70% 15%, #d8eefa 0%, transparent 55%),
+    radial-gradient(ellipse 80% 70% at 50% 80%, #b8dff5 0%, transparent 65%),
+    radial-gradient(ellipse 60% 45% at 85% 60%, #cce9f8 0%, transparent 50%),
+    linear-gradient(170deg, #b8dff5 0%, #a8d8f0 35%, #7ec4e8 65%, #5ab4e0 100%);
 }
 
-/* Orbe azul vibrante centrado — bordes mint claro exactos de la imagen */
+/* Capa de brillo nube central */
 body:not(.dark-mode) .hero-bg::after {
   background:
-    radial-gradient(circle 55vw at 50% 52%,
-      #1535c8        0%,
-      #2248d0       15%,
-      #3a6ad0       32%,
-      #5a8ee0       48%,
-      rgba(130,180,225,.55) 65%,
-      transparent   80%
+    radial-gradient(ellipse 65% 55% at 42% 38%,
+      rgba(255,255,255,.72)  0%,
+      rgba(220,240,255,.45) 35%,
+      rgba(180,220,245,.20) 60%,
+      transparent 80%
+    ),
+    radial-gradient(ellipse 40% 35% at 68% 22%,
+      rgba(255,255,255,.50)  0%,
+      rgba(200,235,255,.25) 45%,
+      transparent 70%
     );
-  filter: blur(4px);
-  animation: orbeMove 18s ease-in-out infinite alternate;
+  filter: blur(6px);
+  animation: orbeMove 22s ease-in-out infinite alternate;
 }
 
 /* Canvas puntos — sutiles sobre fondo claro */
@@ -2929,7 +2937,7 @@ body:not(.dark-mode) .hero-cats-grid .hero-cat-chip:hover {
 
 /* ---- Secciones landing claro ---- */
 body:not(.dark-mode) .landing-sections {
-  background: #b5e8df;
+  background: #a8d8f0;
 }
 
 body:not(.dark-mode) .section-about-text h2 {
