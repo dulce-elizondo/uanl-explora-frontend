@@ -79,17 +79,13 @@ a {
   100% { transform: scale(1.09) translate(-8px, 18px); }
 }
 
-/* Grid de puntos + segundo orbe secundario (capa 2) */
-.hero-bg::before {
-  content: '';
+/* Canvas de puntos interactivos (JS lo crea encima del hero-bg) */
+#hero-dot-canvas {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
-  background-size: 30px 30px;
-  z-index: 1;
+  z-index: 2;
+  pointer-events: none;
 }
-
-/* Orbe central suave (capa extra en JS – ver index.html) */
 
 /* ---- TOPBAR ---- */
 .landing-topbar {
@@ -158,8 +154,6 @@ a {
   text-align: center;
   padding: 40px 24px 120px;
   color: #fff;
-  transition: transform .08s linear;
-  will-change: transform;
 }
 
 @keyframes fadeUp {
@@ -501,9 +495,32 @@ a {
 
 /* ---- CATEGORÍAS BENTO ---- */
 .section-categorias {
-  background: #07111f;
-  padding: 80px 40px;
+  position: relative;
+  padding: 90px 40px;
   text-align: center;
+  overflow: hidden;
+  /* Fondo propio: degradado magenta-índigo-teal */
+  background:
+    radial-gradient(ellipse 80% 60% at 0% 50%,   rgba(120, 0, 180, .35) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 70% at 100% 20%,  rgba(0, 140, 220, .3) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 110%,  rgba(0, 200, 180, .2) 0%, transparent 60%),
+    #07111f;
+  border-top: 1px solid rgba(255,255,255,.05);
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+
+/* Vidrio que envuelve el contenido de categorías */
+.section-categorias-inner {
+  position: relative;
+  z-index: 1;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 28px;
+  backdrop-filter: blur(14px);
+  padding: 52px 44px 44px;
+  max-width: 960px;
+  margin: 0 auto;
+  box-shadow: 0 8px 48px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.08);
 }
 
 .section-categorias h2 {
@@ -527,7 +544,7 @@ a {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 14px;
-  max-width: 860px;
+  max-width: 100%;
   margin: 0 auto;
 }
 
@@ -2660,4 +2677,261 @@ body.dark-mode .uanl-confirm-cancel:hover {
     white-space: normal;
     text-align: center;
   }
+}
+
+/* ============================================================
+   LANDING – MODO CLARO (sin body.dark-mode)
+   Tonos celeste / azul cielo – misma estructura, paleta clara
+   ============================================================ */
+
+/* Hero: fondo blanco-azul claro */
+body:not(.dark-mode) .landing-hero {
+  background: #e8f4ff;
+}
+
+body:not(.dark-mode) .hero-bg {
+  background: #daeeff;
+}
+
+/* Orbes en tonos celeste claro */
+body:not(.dark-mode) .hero-bg::after {
+  background:
+    radial-gradient(ellipse 70% 55% at 10% 15%,  rgba(56, 152, 255, .45) 0%, transparent 55%),
+    radial-gradient(ellipse 55% 70% at 88% 80%,  rgba(0, 180, 230, .35) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 45% at 55% 100%, rgba(100, 210, 255, .3) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 10%,  rgba(30, 120, 220, .2) 0%, transparent 50%);
+}
+
+/* Puntos más visibles sobre fondo claro */
+body:not(.dark-mode) #hero-dot-canvas {
+  filter: none;
+}
+
+/* Topbar en modo claro */
+body:not(.dark-mode) .landing-topbar.scrolled {
+  background: rgba(220, 240, 255, .85);
+  box-shadow: 0 1px 0 rgba(100,180,255,.25), 0 4px 24px rgba(0,80,160,.12);
+}
+
+body:not(.dark-mode) .landing-logo {
+  color: #0a3a6e;
+}
+
+body:not(.dark-mode) .landing-logo .gold {
+  background: linear-gradient(90deg, #1a6cc4, #0a99d4, #1a6cc4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body:not(.dark-mode) .btn-acceder-hero {
+  background: rgba(255,255,255,.55);
+  color: #0a3a6e;
+  border-color: rgba(30,100,200,.3);
+}
+
+body:not(.dark-mode) .btn-acceder-hero:hover {
+  background: rgba(255,255,255,.85);
+  border-color: rgba(30,100,200,.5);
+  box-shadow: 0 0 20px rgba(30,120,255,.2);
+}
+
+/* Badge */
+body:not(.dark-mode) .hero-badge {
+  background: rgba(255,255,255,.55);
+  border-color: rgba(30,120,220,.25);
+  color: #0a3a6e;
+  backdrop-filter: blur(10px);
+}
+
+body:not(.dark-mode) .hero-badge-dot {
+  background: #0099cc;
+  box-shadow: 0 0 8px #0099cc;
+}
+
+/* Título */
+body:not(.dark-mode) .landing-title .word-uanl {
+  color: #0a3a6e;
+  text-shadow: 0 0 30px rgba(30,120,255,.2);
+}
+
+body:not(.dark-mode) .landing-title .gold {
+  background: linear-gradient(90deg, #1a6cc4 0%, #00aee0 40%, #1a6cc4 70%, #0088cc 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body:not(.dark-mode) .landing-subtitle {
+  color: rgba(10, 58, 110, .75);
+}
+
+/* Buscador */
+body:not(.dark-mode) .hero-searchbar {
+  background: rgba(255,255,255,.7);
+  border-color: rgba(30,120,220,.3);
+  box-shadow: 0 8px 32px rgba(0,80,160,.15), inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+body:not(.dark-mode) .hero-searchbar:focus-within {
+  border-color: rgba(0,140,220,.6);
+  box-shadow: 0 8px 40px rgba(0,80,180,.2), 0 0 0 3px rgba(0,150,230,.15);
+}
+
+body:not(.dark-mode) .hero-searchbar input {
+  color: #0a3a6e;
+}
+
+body:not(.dark-mode) .hero-searchbar input::placeholder {
+  color: rgba(10,58,110,.45);
+}
+
+body:not(.dark-mode) .hero-searchbar-btn {
+  background: linear-gradient(135deg, #1a7cd4, #005faa);
+  box-shadow: 0 4px 15px rgba(0,80,180,.35);
+}
+
+/* Dropdown categorías */
+body:not(.dark-mode) .hero-cats-dropdown {
+  background: rgba(230,245,255,.92);
+  border-color: rgba(30,120,220,.2);
+  box-shadow: 0 12px 36px rgba(0,60,160,.15);
+}
+
+body:not(.dark-mode) .hero-cats-title {
+  color: rgba(10,58,110,.5);
+}
+
+body:not(.dark-mode) .hero-cats-grid .hero-cat-chip {
+  background: rgba(255,255,255,.6);
+  border-color: rgba(30,120,220,.2);
+  color: #0a3a6e;
+}
+
+body:not(.dark-mode) .hero-cats-grid .hero-cat-chip:hover {
+  background: rgba(30,140,230,.12);
+  border-color: rgba(30,140,230,.4);
+  color: #003f8a;
+}
+
+/* ---- Secciones landing claro ---- */
+body:not(.dark-mode) .landing-sections {
+  background: #f0f8ff;
+}
+
+body:not(.dark-mode) .section-about-text h2 {
+  background: linear-gradient(90deg, #0a3a6e 0%, #1a88cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body:not(.dark-mode) .section-about-text p {
+  color: rgba(10,40,90,.65);
+}
+
+body:not(.dark-mode) .section-about-icon {
+  filter: drop-shadow(0 0 16px rgba(30,120,230,.25));
+}
+
+/* Listón */
+body:not(.dark-mode) .section-liston {
+  background: linear-gradient(90deg, rgba(180,220,255,.8) 0%, rgba(210,235,255,.9) 50%, rgba(180,220,255,.8) 100%);
+  border-color: rgba(30,120,220,.2);
+}
+
+body:not(.dark-mode) .section-liston p {
+  color: #0a3a6e;
+}
+
+/* Sección categorías */
+body:not(.dark-mode) .section-categorias {
+  background:
+    radial-gradient(ellipse 80% 60% at 0% 50%,   rgba(100, 180, 255, .4) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 70% at 100% 20%,  rgba(0, 200, 240, .3) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 110%,  rgba(150, 220, 255, .25) 0%, transparent 60%),
+    #dff0ff;
+}
+
+body:not(.dark-mode) .section-categorias-inner {
+  background: rgba(255,255,255,.55);
+  border-color: rgba(30,120,220,.18);
+  box-shadow: 0 8px 40px rgba(0,80,160,.12), inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+body:not(.dark-mode) .section-categorias h2 {
+  background: linear-gradient(90deg, #0a3a6e 0%, #1a88cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body:not(.dark-mode) .section-categorias .section-sub {
+  color: rgba(10,40,90,.5);
+}
+
+/* Bento cards modo claro */
+body:not(.dark-mode) .bento-card {
+  background: rgba(255,255,255,.5);
+  border-color: rgba(30,120,220,.15);
+  color: #0a3a6e;
+}
+
+body:not(.dark-mode) .bento-card:hover {
+  background: rgba(255,255,255,.85);
+  border-color: rgba(30,120,220,.35);
+}
+
+body:not(.dark-mode) .bento-card .cat-name {
+  color: #0a3a6e;
+}
+
+/* Destacados */
+body:not(.dark-mode) .section-destacados h2 {
+  background: linear-gradient(90deg, #0a3a6e 0%, #1a88cc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body:not(.dark-mode) .dest-card {
+  background: rgba(255,255,255,.7);
+  border-color: rgba(30,120,220,.18);
+}
+
+body:not(.dark-mode) .dest-card:hover {
+  box-shadow: 0 16px 48px rgba(0,80,180,.15), 0 0 0 1px rgba(30,140,220,.25);
+  border-color: rgba(30,140,220,.35);
+}
+
+body:not(.dark-mode) .dest-card-img {
+  background: linear-gradient(135deg, rgba(180,220,255,.8), rgba(210,240,255,.6));
+  filter: drop-shadow(0 0 14px rgba(30,120,220,.2));
+}
+
+body:not(.dark-mode) .dest-card-body h3 {
+  color: #0a3a6e;
+}
+
+body:not(.dark-mode) .dest-card-body p {
+  color: rgba(10,40,90,.55);
+}
+
+body:not(.dark-mode) .dest-card-stars small {
+  color: rgba(10,40,90,.4);
+}
+
+/* Footer */
+body:not(.dark-mode) .landing-footer {
+  background: #c8e4f8;
+  border-top-color: rgba(30,120,220,.15);
+  color: rgba(10,40,90,.55);
+}
+
+body:not(.dark-mode) .landing-footer strong {
+  background: linear-gradient(90deg, #005faa, #0099cc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

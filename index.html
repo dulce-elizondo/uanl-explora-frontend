@@ -17,8 +17,10 @@
 <!-- ===== HERO ===== -->
 <section class="landing-hero">
 
-  <!-- Fondo con parallax -->
+  <!-- Fondo con orbes -->
   <div class="hero-bg" id="hero-bg"></div>
+  <!-- Canvas de puntos interactivos -->
+  <canvas id="hero-dot-canvas"></canvas>
 
   <!-- Topbar transparente -->
   <div class="landing-topbar" id="landing-topbar">
@@ -81,6 +83,7 @@
 
   <!-- Categorías Bento Grid -->
   <div class="section-categorias">
+    <div class="section-categorias-inner">
     <h2>Explora por categoría</h2>
     <p class="section-sub">Encuentra exactamente lo que necesitas en el campus</p>
 
@@ -110,6 +113,7 @@
         <div class="cat-name">Internet</div>
       </a>
     </div>
+    </div><!-- /section-categorias-inner -->
   </div>
 
   <!-- Destacados -->
@@ -137,27 +141,93 @@ window.addEventListener('scroll', function() {
   else topbar.classList.remove('scrolled');
 }, { passive: true });
 
-// Cursor parallax en el centro del hero
+// ── Puntos interactivos con iluminación de color al pasar el cursor ──
 (function() {
-  var center = document.querySelector('.landing-center');
+  var canvas = document.getElementById('hero-dot-canvas');
   var hero   = document.querySelector('.landing-hero');
-  if (!center || !hero) return;
-  var cx = 0, cy = 0, tx = 0, ty = 0;
+  if (!canvas || !hero) return;
+
+  var ctx = canvas.getContext('2d');
+  var SPACING = 30;   // distancia entre puntos
+  var RADIUS  = 1.5;  // tamaño base del punto
+  var GLOW_R  = 110;  // radio de influencia del cursor
+
+  // Paleta según modo
+  function getColors() {
+    return document.body.classList.contains('dark-mode')
+      ? [[0,150,255],[80,0,220],[0,220,200],[100,180,255],[160,80,255]]   // oscuro: neón
+      : [[30,140,230],[0,180,220],[100,200,255],[0,120,200],[60,160,240]]; // claro: celeste
+  }
+  var COLORS = getColors();
+
+  var mouse = { x: -999, y: -999 };
+  var dots  = [];
+  var W, H;
+
+  function resize() {
+    W = canvas.width  = hero.offsetWidth;
+    H = canvas.height = hero.offsetHeight;
+    buildDots();
+  }
+
+  function buildDots() {
+    dots = [];
+    var cols = Math.ceil(W / SPACING) + 1;
+    var rows = Math.ceil(H / SPACING) + 1;
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        // color asignado al azar por posición (estable)
+        var ci = (r * 7 + c * 13) % COLORS.length;
+        dots.push({ x: c * SPACING, y: r * SPACING, ci: ci });
+      }
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    var mx = mouse.x, my = mouse.y;
+
+    for (var i = 0; i < dots.length; i++) {
+      var d = dots[i];
+      var dx = d.x - mx, dy = d.y - my;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      var t = Math.max(0, 1 - dist / GLOW_R); // 0..1
+
+      if (t > 0) {
+        var col = COLORS[d.ci];
+        var alpha = 0.12 + t * 0.75;
+        var r2    = RADIUS + t * 3.5;
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, r2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + alpha.toFixed(2) + ')';
+        // glow con shadowBlur
+        ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (t * 0.9).toFixed(2) + ')';
+        ctx.shadowBlur  = t * 14;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      } else {
+        // punto base (más visible en modo claro)
+        var dark = document.body.classList.contains('dark-mode');
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, RADIUS, 0, Math.PI * 2);
+        ctx.fillStyle = dark ? 'rgba(255,255,255,0.07)' : 'rgba(30,100,200,0.12)';
+        ctx.fill();
+      }
+    }
+    requestAnimationFrame(draw);
+  }
+
   hero.addEventListener('mousemove', function(e) {
     var r = hero.getBoundingClientRect();
-    var mx = (e.clientX - r.left) / r.width  - 0.5;  // -0.5 a 0.5
-    var my = (e.clientY - r.top)  / r.height - 0.5;
-    tx = mx * 18;   // max ±9px
-    ty = my * 12;
+    mouse.x = e.clientX - r.left;
+    mouse.y = e.clientY - r.top;
+    COLORS = getColors(); // actualiza paleta si cambió el tema
   });
-  hero.addEventListener('mouseleave', function() { tx = 0; ty = 0; });
-  function raf() {
-    cx += (tx - cx) * 0.08;
-    cy += (ty - cy) * 0.08;
-    center.style.transform = 'translate(' + cx.toFixed(2) + 'px,' + cy.toFixed(2) + 'px)';
-    requestAnimationFrame(raf);
-  }
-  raf();
+  hero.addEventListener('mouseleave', function() { mouse.x = -999; mouse.y = -999; });
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
 })();
 
 // Dropdown categorías del buscador
