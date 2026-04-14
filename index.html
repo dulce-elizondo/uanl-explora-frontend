@@ -141,26 +141,27 @@ window.addEventListener('scroll', function() {
   else topbar.classList.remove('scrolled');
 }, { passive: true });
 
-// ── Puntos interactivos con iluminación de color al pasar el cursor ──
+// ── Puntos con efecto antigravedad (repulsión + spring de vuelta) ──
 (function() {
   var canvas = document.getElementById('hero-dot-canvas');
   var hero   = document.querySelector('.landing-hero');
   if (!canvas || !hero) return;
 
-  var ctx = canvas.getContext('2d');
-  var SPACING = 30;   // distancia entre puntos
-  var RADIUS  = 1.5;  // tamaño base del punto
-  var GLOW_R  = 110;  // radio de influencia del cursor
+  var ctx     = canvas.getContext('2d');
+  var SPACING = 32;    // separación entre puntos
+  var BASE_R  = 1.8;   // radio base del punto
+  var PUSH_R  = 130;   // radio de repulsión del cursor
+  var PUSH_F  = 0.38;  // fuerza de empuje (0..1)
+  var SPRING  = 0.08;  // velocidad de retorno al origen
+  var DAMPING = 0.72;  // amortiguación de velocidad
 
-  // Paleta según modo
   function getColors() {
     return document.body.classList.contains('dark-mode')
-      ? [[0,150,255],[80,0,220],[0,220,200],[100,180,255],[160,80,255]]   // oscuro: neón
-      : [[30,140,230],[0,180,220],[100,200,255],[0,120,200],[60,160,240]]; // claro: celeste
+      ? [[0,160,255],[90,0,230],[0,210,195],[110,180,255],[170,80,255]]
+      : [[10,90,180],[0,130,200],[20,100,210],[0,80,170],[30,110,190]];
   }
-  var COLORS = getColors();
 
-  var mouse = { x: -999, y: -999 };
+  var mouse = { x: -9999, y: -9999 };
   var dots  = [];
   var W, H;
 
@@ -171,59 +172,86 @@ window.addEventListener('scroll', function() {
   }
 
   function buildDots() {
+    var COLORS = getColors();
     dots = [];
     var cols = Math.ceil(W / SPACING) + 1;
     var rows = Math.ceil(H / SPACING) + 1;
     for (var r = 0; r < rows; r++) {
       for (var c = 0; c < cols; c++) {
-        // color asignado al azar por posición (estable)
+        var hx = c * SPACING, hy = r * SPACING;
         var ci = (r * 7 + c * 13) % COLORS.length;
-        dots.push({ x: c * SPACING, y: r * SPACING, ci: ci });
+        dots.push({
+          hx: hx, hy: hy,   // posición home
+          x:  hx, y:  hy,   // posición actual
+          vx: 0,  vy: 0,    // velocidad
+          ci: ci
+        });
       }
     }
   }
 
   function draw() {
+    var COLORS = getColors();
     ctx.clearRect(0, 0, W, H);
     var mx = mouse.x, my = mouse.y;
+    var dark = document.body.classList.contains('dark-mode');
 
     for (var i = 0; i < dots.length; i++) {
-      var d = dots[i];
-      var dx = d.x - mx, dy = d.y - my;
-      var dist = Math.sqrt(dx*dx + dy*dy);
-      var t = Math.max(0, 1 - dist / GLOW_R); // 0..1
+      var d  = dots[i];
 
-      if (t > 0) {
-        var col = COLORS[d.ci];
-        var alpha = 0.12 + t * 0.75;
-        var r2    = RADIUS + t * 3.5;
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, r2, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + alpha.toFixed(2) + ')';
-        // glow con shadowBlur
-        ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (t * 0.9).toFixed(2) + ')';
-        ctx.shadowBlur  = t * 14;
-        ctx.fill();
-        ctx.shadowBlur = 0;
-      } else {
-        // punto base (más visible en modo claro)
-        var dark = document.body.classList.contains('dark-mode');
-        ctx.beginPath();
-        ctx.arc(d.x, d.y, RADIUS, 0, Math.PI * 2);
-        ctx.fillStyle = dark ? 'rgba(255,255,255,0.07)' : 'rgba(30,100,200,0.12)';
-        ctx.fill();
+      // Vector desde cursor al punto
+      var dxM = d.x - mx, dyM = d.y - my;
+      var distM = Math.sqrt(dxM * dxM + dyM * dyM);
+
+      if (distM < PUSH_R && distM > 0) {
+        // Fuerza de repulsión: mayor cuanto más cerca
+        var force = (1 - distM / PUSH_R) * PUSH_F * (PUSH_R / Math.max(distM, 8));
+        d.vx += (dxM / distM) * force * 12;
+        d.vy += (dyM / distM) * force * 12;
       }
+
+      // Spring de vuelta al home
+      d.vx += (d.hx - d.x) * SPRING;
+      d.vy += (d.hy - d.y) * SPRING;
+
+      // Amortiguación
+      d.vx *= DAMPING;
+      d.vy *= DAMPING;
+
+      // Integrar posición
+      d.x += d.vx;
+      d.y += d.vy;
+
+      // Calcular t para el color/tamaño (basado en distancia al home)
+      var ddx = d.x - d.hx, ddy = d.y - d.hy;
+      var disp = Math.sqrt(ddx*ddx + ddy*ddy);
+      var t = Math.min(1, disp / 28); // 0..1 según cuánto se movió
+
+      var col   = COLORS[d.ci];
+      var alpha = dark ? (0.08 + t * 0.82) : (0.22 + t * 0.78);
+      var rr    = BASE_R + t * 3.2;
+
+      ctx.beginPath();
+      ctx.arc(d.x, d.y, rr, 0, Math.PI * 2);
+
+      if (t > 0.05) {
+        ctx.shadowColor = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + Math.min(1, t * 1.1).toFixed(2) + ')';
+        ctx.shadowBlur  = t * 18;
+      }
+      ctx.fillStyle = 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + alpha.toFixed(2) + ')';
+      ctx.fill();
+      ctx.shadowBlur = 0;
     }
+
     requestAnimationFrame(draw);
   }
 
   hero.addEventListener('mousemove', function(e) {
-    var r = hero.getBoundingClientRect();
+    var r  = hero.getBoundingClientRect();
     mouse.x = e.clientX - r.left;
     mouse.y = e.clientY - r.top;
-    COLORS = getColors(); // actualiza paleta si cambió el tema
   });
-  hero.addEventListener('mouseleave', function() { mouse.x = -999; mouse.y = -999; });
+  hero.addEventListener('mouseleave', function() { mouse.x = -9999; mouse.y = -9999; });
 
   window.addEventListener('resize', resize);
   resize();
